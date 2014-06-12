@@ -12,13 +12,12 @@
   },
   "keywords": [
     "python",
-    "product",
+    "product recommendation",
     "recommendation",
-    "machine",
-    "learning"
+    "machine learning"
   ],
-  "author": "Luke Ramsey",
-  "license": "BSD-2-Clause",
+  "author": "Luke Ramsey <lramsey177@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lramsey/recommendation-engine/issues"
   }

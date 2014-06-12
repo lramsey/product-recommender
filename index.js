@@ -14,7 +14,9 @@ rec.powerClusters        = null;
 rec.unfilteredCluster    = null;
 
 module.exports = Recommender = {
-  setRecVariables: function(names, prods, matrix){
+  setRecVariables: function(names, prods, matrix, cb){
+    cb = cb || function(){};
+
     var python = require('child_process').spawn(
       'python',
       ["./pyscript/exec.py", names, prods, matrix]);
@@ -37,6 +39,8 @@ module.exports = Recommender = {
       rec.powerClusters        = results[6];
       rec.unfilteredCluster    = results[8];
 
+      args = Array.prototype.slice.call(arguments,4);
+      cb.apply(this,args);
     });
   },
 
@@ -48,5 +52,9 @@ module.exports = Recommender = {
     } else{
       return rec[key];
     }
+  },
+
+  getRecKeys: function(){
+    return Object.keys(rec);
   }
 };
