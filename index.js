@@ -1,4 +1,3 @@
-
 var rec = {};
 rec.results              = null;
 rec.customers            = null;
@@ -19,7 +18,7 @@ module.exports = Recommender = {
 
     var python = require('child_process').spawn(
       'python',
-      ["./pyscript/exec.py", names, prods, matrix]);
+      [__dirname + '/pyscript/exec.py', names, prods, matrix]);
     output = '';
     python.stdout.on('data', function(data){
       output += data;
