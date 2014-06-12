@@ -1,7 +1,6 @@
 import customers as c
-import util      as u
 import numpy     as np
-from   scipy import sparse
+# from   scipy import sparse
 import math
 
 productMatrix = {}
@@ -16,8 +15,8 @@ def addProducts(prods):
     for i in range(0, len(prods)):
         productsMap[prods[i]] = i
 
-def checkProducts(shoppers):
-    sparseMatrix = sparse.csr_matrix(c.matrix)
+# def checkProducts(shoppers):
+#     sparseMatrix = sparse.csr_matrix(c.matrix)
 
 def productSim(item1, item2):
     matrix = c.matrix
@@ -50,7 +49,7 @@ def productSim(item1, item2):
 
 def productMatrixiser():
     productMatrix = []
-    checkProducts(c.customers)
+    # checkProducts(c.customers)
     for i in range(0, len(products)):
         sims = []
         for j in range(0, len(products)):
