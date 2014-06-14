@@ -2,17 +2,12 @@
 
 ## Contents
 
-[What is Product-Recommender?](#about)
-
-[Setup Process](#setup)
-
-[API](#use)
-
-[Recommendation Variables](#vars)
-
-[Recommendation Engine](#learn)
-
-[Analytics](#analysis)
+[What is Product-Recommender?](#about)  
+[Setup Process](#setup)  
+[API](#use)  
+[Recommendation Variables](#vars)  
+[Recommendation Engine](#learn)  
+[Analytics](#analysis)  
 
 ## <a name="about"/>  What is Product-Recommender?</a>
 
