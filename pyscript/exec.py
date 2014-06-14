@@ -23,10 +23,13 @@ for m in range(6,9):
         else:
             for n in range(0,len(results[m][l][1])):
                 if not isinstance(results[m][l][1][n], list):
+                    print m
+                    print results[m][0][l][1][n]
                     results[m][l][1][n] = results[m][l][1][n].tolist()
         for k in range(0, len(results[m][l][3])):
             results[m][l][3][k] = str(results[m][l][3][k])
         if not isinstance(results[2], float):
-            results[m][l][4] = float(results[m][l][4])
+            results[m][l][5] = float(results[m][l][5])
+results[8] = results[8][0]
 
 print j.encode(results)

@@ -17,46 +17,58 @@ def run(names):
     cl.__init__(transpose, p.products)
     catNum = len(p.products)/8 + 1
     outputs = cl.kMeans(catNum,8)
-    prodClusters = outputs[0]
+    productClusters = outputs[0]
     centroids = outputs[1]
 
-    inputs = st.subMatrices(prodClusters)
-    prodClusters = n.normalizeProdClusters(prodClusters, centroids, inputs[0], inputs[1], 0.2, 0.4)
-    results.append(prodClusters)
+    inputs = st.subMatrices(productClusters)
+    productClusters = n.normalizeProdClusters(productClusters, centroids, inputs[0], inputs[1], 0.2, 0.4)
+    results.append(productClusters)
+    results.append(p.productsMap)
+    results.append(products)
 
-    inputs = st.subMatrices(prodClusters)
+    inputs = st.subMatrices(productClusters)
     subMats = inputs[0]
     maps = inputs[1]
     indexMap = inputs[2]
 
-    subClusters = []
+    subClustersHelpers = []
     for i in range(0, len(subMats)):
-        subCluster = st.createSubcluster(indexMap[i], subMats[i], maps[i])
+        subCluster = st.createSubclustersHelpers(indexMap[i], subMats[i], maps[i])
         subCluster.append(r.buildRecommendations(names, [subCluster]))
-        subClusters.append(subCluster)
+        subClustersHelpers.append(subCluster)
 
 
-    totCluster = st.createSubcluster(p.products, c.matrix, p.productsMap)
-    totCluster.append(r.buildRecommendations(names,[totCluster]))
-    powerClusters = []
+    customerClustersHelpers = st.createSubclustersHelpers(p.products, c.matrix, p.productsMap)
+    customerClustersHelpers.append(r.buildRecommendations(names,[customerClustersHelpers]))
+    powerClustersHelpers = []
     powerSil = []
-    results.append('unfiltered results: ' + str(totCluster[4]))
     powerI = []
-    for i in range(0, len(subClusters)):
-        if subClusters[i][4] >= totCluster[4]:
-            powerClusters.append(subClusters[i])
-            powerSil.append(subClusters[i][4])
+    for i in range(0, len(subClustersHelpers)):
+        if subClustersHelpers[i][4] >= customerClustersHelpers[4]:
+            powerClustersHelpers.append(subClustersHelpers[i])
+            powerSil.append(subClustersHelpers[i][4])
             powerI.append(i)
     if(len(powerSil) == 0):
         return 'again'
-    else:
-        results.append('filtered average: ' + str(sum(powerSil)/len(powerSil)))
+    displacement = 0
     for i in range(0,len(powerI)):
-        subClusters.pop(powerI[i])
+        subClustersHelpers.pop(powerI[i]-displacement)
+        displacement += 1
 
-    recommendationMatrix = r.buildRecommendations(names, powerClusters)
-    results.append(recommendationMatrix)
-    results.append(powerClusters)
+    powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
+    results.append(powerRecMatrix)
+    results.append(powerClustersHelpers)
+    results.append(subClustersHelpers)
+    results.append([customerClustersHelpers])
+    customerClusters = [customerClustersHelpers[0][0]] 
+    results.append(customerClusters)
+    subClusters = []
+    for i in range(0, len(subClustersHelpers)):
+        subClusters.append(subClustersHelpers[i][0])
     results.append(subClusters)
-    results.append([totCluster])
+    powerClusters = []
+    for i in range(0,len(powerClustersHelpers)):
+        powerClusters.append(powerClustersHelpers[i][0])
+    results.append(powerClusters)
+    results.append(c.matrix)
     return results

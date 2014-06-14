@@ -1,19 +1,25 @@
 var rec = {};
-rec.results              = null;
-rec.customers            = null;
-rec.products             = null;
-rec.purchaseHist         = null;
-rec.customersMap         = null;
-rec.unfilteredSilhouette = null;
-rec.filteredSilhouette   = null;
-rec.productClusters      = null;
-rec.recommendationMatrix = null;
-rec.subClusters          = null;
-rec.powerClusters        = null;
-rec.unfilteredCluster    = null;
+
+rec.results                = null;
+rec.customers              = null;
+rec.products               = null;
+rec.history                = null;
+rec.customersMap           = null;
+rec.productsMap            = null;
+rec.productClusters        = null;
+rec.customerClusters       = null;
+rec.recommendationMatrix   = null;
+rec.customerClusterHelpers = null;
+rec.subClusters            = null;
+rec.subClusterHelpers      = null;
+rec.powerClusters          = null;
+rec.powerClustersHelpers    = null;
+rec.powerRecMatrix         = null;
 
 module.exports = Recommender = {
-  setRecVariables: function(names, prods, matrix, cb){
+  setRecVariables: function(matrix, cb, names, prods){
+    names = names || matrix.length;
+    prods = prods || matrix[0].length;
     cb = cb || function(){};
 
     var python = require('child_process').spawn(
@@ -25,18 +31,21 @@ module.exports = Recommender = {
     });
     python.stdout.on('close', function(){
       results = JSON.parse(output);
-      rec.results              = results;
-      rec.customers            = results[0];
-      rec.products             = results[9];
-      rec.purchaseHist         = results[10];
-      rec.customersMap         = results[1];
-      rec.productClusters      = results[2];
-      rec.unfilteredSilhouette = results[3];
-      rec.filteredSilhouette   = results[4];
-      rec.recommendationMatrix = results[5];
-      rec.subClusters          = results[6] + results[7];
-      rec.powerClusters        = results[6];
-      rec.unfilteredCluster    = results[8];
+      rec.results                = results;
+      rec.customers              = results[0];
+      rec.products               = results[4];
+      rec.history                = results[11];
+      rec.customersMap           = results[1];
+      rec.productsMap            = results[3];
+      rec.productClusters        = results[2];
+      rec.customerClusters       = results[9];
+      rec.recommendationMatrix   = results[5];
+      rec.customerClusterHelpers = results[8];
+      rec.subClusters            = results[9];
+      rec.subClusterHelpers      = results[6] + results[7];
+      rec.powerClusters          = results[10];
+      rec.powerClusterHelpers    = results[6];
+      rec.powerRecMatrix         = results[5];
 
       args = Array.prototype.slice.call(arguments,4);
       cb.apply(this,args);

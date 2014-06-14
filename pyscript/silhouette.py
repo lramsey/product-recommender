@@ -2,10 +2,13 @@ import customers  as c
 import clustering as cl
 
 matrix = [[]]
+silhouettesList = []
 
 def __init__(mat):
     global matrix
     matrix = mat
+    global silhouettesList
+    silhouettesList = []
 
 def distFromCentroid(cluster, centroid):
     a = 0.0
@@ -36,4 +39,6 @@ def silhouette(cluster):
             b = c
         if b == 0:
             return 0
-    return (b-a)/max(a,b)
+    sil = (b-a)/max(a,b)
+    silhouettesList.append(sil)
+    return sil

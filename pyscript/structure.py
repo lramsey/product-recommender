@@ -26,7 +26,7 @@ def subMatrices(clusters):
         indexMap.append(indexProds)
     return [results, maps, indexMap]
 
-def createSubcluster(indexMap, subMatrix, aMap):
+def createSubclustersHelpers(indexMap, subMatrix, aMap):
     cl.__init__(subMatrix, c.customers, aMap)
     clust = []
     results = cl.kMeans(25,8)
@@ -36,6 +36,7 @@ def createSubcluster(indexMap, subMatrix, aMap):
     clust.append(centroids)
     clust.append(cl.clusterMap)
     clust.append(indexMap)
-    clust.append(s.averageSilhouettes(clust[0], subMatrix))
-    clust.append(aMap)
+    avgSils = s.averageSilhouettes(clust[0], subMatrix)
+    clust.append(s.silhouettesList)
+    clust.append(avgSils)
     return clust

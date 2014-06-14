@@ -38,7 +38,7 @@ def clusterRecommender(name, hist, cluster, index, recObj):
     clusterIndex  = cluster[2][name]
     # centroid of user's cluster
     centroid      = cluster[1][clusterIndex]
-    silhouette    = cluster[4]
+    silhouette    = cluster[5]
     results       = findDiffs(hist, centroid, silhouette, index, recObj)
     return results
 

@@ -94,7 +94,7 @@ Index 2 contains an object that contains a key of customer names and a correspon
     
 Index 3 contains an object that contains a key of a customer name and a corresponding number that refers to what index inside that customer's cluster the customer name currently lies.
     
- Index 4 contains an array of silhouette.  The silhouette is an analysis that compares how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. These silhouettes will be a value between 0 and 1, with numbers closer to 1 indicating stronger clusters.  Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
+Index 4 contains an array of silhouette.  The silhouette is an analysis that compares how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. These silhouettes will be a value between 0 and 1, with numbers closer to 1 indicating stronger clusters.  Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
 
 Index 5 contains an average of all the cluster silhouettes in index 4.  This serves as a rough indicator of the strength of all the clustering in customerClusters.
       
