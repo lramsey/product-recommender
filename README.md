@@ -1,12 +1,19 @@
 # Product-Recommender NPM Module
 
 ## Contents
+
 [What is Product-Recommender?](#about)
+
 [Setup Process](#setup)
+
 [API](#use)
+
 [Recommendation Variables](#vars)
+
 [Recommendation Engine](#learn)
+
 [Analytics](#analysis)
+
 [Issues](#fix)
 
 ## <a name="about"/>  What is Product-Recommender
@@ -31,155 +38,163 @@ Once all of these dependencies are installed, adding the product-recommender mod
 
 Product-Recommender consists of three core parts, Recommendation Variables, Recommendation Engine, and Analytics.  When using product-recommender though, the first step is to make sure you have required the module on the page you are using.  As an example, I will use the variable rec to symbolize my module.
   
-  var rec = require('product-recommender');
+    var rec = require('product-recommender')
 
-1)  <a name='vars'/> Recommendation Variables:
+## 1.  <a name='vars'/> Recommendation Variables
 
 The recommendation variables hold the raw results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariables method, passing the desired variable name in as a key.
 
-  rec.getRecVariables(key);
+    rec.getRecVariables(key);
 
 To receive an array containing all of the recommendation variables, one can call the getRecKeys() method. 
 
-  rec.getRecKeys();
+     rec.getRecKeys();
 
 Initially the reccommendation variables will be set to null, until a call is made to launch the python recommendation engine.  Now, I will describe the recommendation variables.
 
-  I)    results
+**results**
 
-    An array containing the raw results sent from my product recommendation algorithm.  These results are portrayed in the succeeding variables
+An array containing the raw results sent from my product recommendation algorithm.  These results are portrayed in the succeeding variables
   
-  II)   customers
+**customers**
     
-    An array containing the name string of every customer.  The order of customers in this array matches the customer order in the succeeding matrices.
+An array containing the name string of every customer.  The order of customers in this array matches the customer order in the succeeding matrices.
   
-  III)  products
+**products**
 
-    An array containing the name string of every product.  The order of products in this array matches the product order in the history matrix.
+An array containing the name string of every product.  The order of products in this array matches the product order in the history matrix.
 
-  IV)   history
+**history**
    
-    A nested array containing the raw purchase history nested array passed in as a parameter to the setRecVariables method.  Each index in the outer array refers to a customer, and each index in the inner array refers to how much of a particular product a customer bought.
+A nested array containing the raw purchase history nested array passed in as a parameter to the setRecVariables method.  Each index in the outer array refers to a customer, and each index in the inner array refers to how much of a particular product a customer bought.
 
-  V)    customersMap
+**customersMap**
   
-    An object that contains each customer's string name as keys, with corresponding values referring to which index that string is stored in the customers array and various matrices.
+An object that contains each customer's string name as keys, with corresponding values referring to which index that string is stored in the customers array and various matrices.
 
-  VI)   productsMap
+**productsMap**
   
-    An object that contains each product's string name as keys, with corresponding values referring to which index that string is stored in the products array and history matrix.
+An object that contains each product's string name as keys, with corresponding values referring to which index that string is stored in the products array and history matrix.
 
-  VII)  productClusters
+**productClusters**
   
-    A nested array structure.  Each array refers to a grouping of products that the product-recommendation algorithm has determined are similar based on aggregate customer buying patterns.
+ A nested array structure.  Each array refers to a grouping of products that the product-recommendation algorithm has determined are similar based on aggregate customer buying patterns.
 
-  VIII) customerClusters
+**customerClusters**
   
-    A nested array structure.  Each array refers to a grouping of customers based on similar purchase trends based on the total product set.
+ A nested array structure.  Each array refers to a grouping of customers based on similar purchase trends based on the total product set.
 
-  IX)   recommendationMatrix
+**recommendationMatrix**
   
-    A nested array that organizes customer recommendations based on the groupings listed in the customerClusters variable.  These recommendations are ordered, so the last product in each inner array is the product my algorithm has determined is the best product to recommend based on the customerClusters.  Also, these products contain metadata
+A nested array that organizes customer recommendations based on the groupings listed in the customerClusters variable.  These recommendations are ordered, so the last product in each inner array is the product my algorithm has determined is the best product to recommend based on the customerClusters.  Also, these products contain metadata
 
-  X)    customerClusterHelpers
+**customerClusterHelpers**
 
-    An array of seven useful tools in relation to the customerClusters.  I will describe each element by its index in the array.
+An array of seven useful tools in relation to the customerClusters.  I will describe each element by its index in the array.
     
-      Index 0 contains the customerClusters.
+Index 0 contains the customerClusters.
 
-      Index 1 contains an array of centroid values for each cluster, where centroid 
-      refers to the average purchase trends of every customer within a group. 
+Index 1 contains an array of centroid values for each cluster, where centroid 
+refers to the average purchase trends of every customer within a group. 
 
-      Index 2 contains an object that contains a key of customer names and a corresponding number referring to which cluster that customer is in.  That number refers to the index of a particular cluster in the customerClusters array.
+Index 2 contains an object that contains a key of customer names and a corresponding number referring to which cluster that customer is in.  That number refers to the index of a particular cluster in the customerClusters array.
     
-      Index 3 contains an object that contains a key of a customer name and a corresponding number that refers to what index inside that customer's cluster the customer name currently lies.
+Index 3 contains an object that contains a key of a customer name and a corresponding number that refers to what index inside that customer's cluster the customer name currently lies.
     
-      Index 4 contains an array of silhouette.  The silhouette is an analysis that compares how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. These silhouettes will be a value between 0 and 1, with numbers closer to 1 indicating stronger clusters.
-      Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
+ Index 4 contains an array of silhouette.  The silhouette is an analysis that compares how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. These silhouettes will be a value between 0 and 1, with numbers closer to 1 indicating stronger clusters.  Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
 
-      Index 5 contains an average of all the cluster silhouettes in index 4.  This serves as a rough indicator of the strength of all the clustering in customerClusters.
+Index 5 contains an average of all the cluster silhouettes in index 4.  This serves as a rough indicator of the strength of all the clustering in customerClusters.
       
-      Index 6 contains the recommendationMatrix that is built up based on the customerClusters.  This presents ordered product recommendations for each customer, with the last element of each customer array referring to the product my algorithm most highly recommends based on the customerCluster.
+Index 6 contains the recommendationMatrix that is built up based on the customerClusters.  This presents ordered product recommendations for each customer, with the last element of each customer array referring to the product my algorithm most highly recommends based on the customerCluster.
   
-  XI)   subClusters
+**subClusters**
 
-  An array containing all the more focused customer clustering that is determined by the product groupings found in productClusters.  Customers in these subClusters are grouped with other customers based on their similar buying patterns in relation to these smaller product groups.
+An array containing all the more focused customer clustering that is determined by the product groupings found in productClusters.  Customers in these subClusters are grouped with other customers based on their similar buying patterns in relation to these smaller product groups.
 
-  XII)  subClustersHelpers
+**subClustersHelpers**
 
-  An array containing a series of 7 element arrays similar to the customerClusterHelpers, but with various subClusters replacing the customerClusters.  Each element in the subClusters array will have its own subClusterHelper.
+An array containing a series of 7 element arrays similar to the customerClusterHelpers, but with various subClusters replacing the customerClusters.  Each element in the subClusters array will have its own subClusterHelper.
 
-  XIII) powerClusters
+** powerClusters**
 
-  An array of that contains elements from the subClusters, but has removed subClusters with a relatively low average silhouette score.
+An array of that contains elements from the subClusters, but has removed subClusters with a relatively low average silhouette score.
 
-  XIV)  powerClusterHelpers
+**powerClusterHelpers**
 
-  Similar to subClusterHelpers, but containing elements from the powerClusters array.
+Similar to subClusterHelpers, but containing elements from the powerClusters array.
 
-  XV)   powerRecMatrix
+**powerRecMatrix**
 
-  A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
+A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
 
-
-2) <a name='learn'/> Recommendation Engine:
+## 2.<a name='learn'/> Recommendation Engine
 
 This section consists of the setRecVariables method, which invokes the python recommendation engine.  When the algorithm has finished streaming its results to node, the setRecVariables method then parses these results and assigns values to each of the recommendation variables.  Whenever one wants a fresh reading of the recommendation engine's analysis, one simply needs to run setRecVariables method again and the reccommendation variables will be set to the values of the latest analysis.
 
 The setRecVariables method takes four parameters: 
 
-  rec.setRecVariables(history, callback, names, products)
+    rec.setRecVariables(history, callback, names, products)
 
-    I)   history
+**history**
 
-      The history argument contains a 2-D array or matrix.  Each entry in the outer array contains the purchase history of an individual customer.  The length of the outer array is the same length as the names array below, so each customer in the data set is represented in the history parameter.  The length of each inner array is the length of the products array below.  Each inner array contains information on which product from the products list each customer has purchased.  The order of products in the inner array should match the order in the products array, so each column of the 2-D array refers to a particular product.
+The history argument contains a 2-D array or matrix.  Each entry in the outer array contains the purchase history of an individual customer.  The length of the outer array is the same length as the names array below, so each customer in the data set is represented in the history parameter.  The length of each inner array is the length of the products array below.  Each inner array contains information on which product from the products list each customer has purchased.  The order of products in the inner array should match the order in the products array, so each column of the 2-D array refers to a particular product.
 
       var history = [ [1,0,0], [1,1,1], [0,1,1] ]
     
-    II)  callback
+**callback**
 
-      The callback parameter consists of a custom callback function that will run after my product recommendation engine has finished streaming its results to node.js.  The algorithm runs asynchronously, so properly putting your continuing product-recommender logic inside a callback function is essential to using product-recommender.
+The callback parameter consists of a custom callback function that will run after my product recommendation engine has finished streaming its results to node.js.  The algorithm runs asynchronously, so properly putting your continuing product-recommender logic inside a callback function is essential to using product-recommender.
 
-      var callback = function(){ console.log(getRecVariables('customers')); }
+      var callback = function(){ console.log(getRecVariables('customers')) }
 
-    III) names
+**names**
       
-      The names argument consists of an array of customer names/unique identifiers.  Each element in this array should be a unique string.
+The names argument consists of an array of customer names/unique identifiers.  Each element in this array should be a unique string.
 
-      If a names argument is not used, the parameter will default to a number n which is the length of the outer array in the history paremeter nested array.  A names array of length n will be created and filled with random unique name strings for each index in the array.
+If a names argument is not used, the parameter will default to a number n which is the length of the outer array in the history paremeter nested array.  A names array of length n will be created and filled with random unique name strings for each index in the array.
 
       var names = [ 'Henry', 'Steve', 'Thea', 'Patrick' ]
 
-    IV)  products
+**products**
       
-      The products argument consists of an array of product names/unique identifiers.  Like the names parameter, each element in this array should be a unique string.
+The products argument consists of an array of product names/unique identifiers.  Like the names parameter, each element in this array should be a unique string.
 
-      If a products argument is not used, the parameter will default to a number n which is the same length of any of the inner arrays in the history parameter nested array.  A products array of length n will be created and filled with random unique product strings for each index in the array.
+If a products argument is not used, the parameter will default to a number n which is the same length of any of the inner arrays in the history parameter nested array.  A products array of length n will be created and filled with random unique product strings for each index in the array.
 
       var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
 
-3) <a name='analytics'/> Analytics:
+## 3.<a name='analytics'/> Analytics
 
 This grouping consists of methods that are designed to analyze the data held in the recommendation variables and produce a desired outcome.  These methods accomplish such goals as determining which cluster is most relevant to a customer's purchase of a particular product or producing a product recommendation for a customer based on recent buying patterns. Now I will describe the analytics functions.
     
-    I)   recommender(customer, recMatrix)
+**recommender(customer, recMatrix)**
 
-      This method accepts inputs of a customer string from the customer array and the optional input of a recommendation matrix.  The method considers the input customer's row from the recommendation matrix and pops off the product that my algorithm has determined is the strongest recommendation in that group.  The recommended product is returned.
+This method accepts inputs of a customer string from the customer array and the optional input of a recommendation matrix.  The method considers the input customer's row from the recommendation matrix and pops off the product that my algorithm has determined is the strongest recommendation in that group.  The recommended product is returned.
 
-      The recommendation matrix parameter allows the more custom recommendation matrices built around buying trends in related product groups to be used instead of the default matrix.  If a user buys a pair of shoes, he may have a certain taste in products similar to shoes that is different than his taste in other areas.  By placing the recommendation matrix concerned with the shoe products in the recommender method, the recommendation can be fine tuned based on the reality that the user recently bought shoes.  With this custom matrix parameter, one can choose which product group of interest one wants the recommendation tailored towards.
+The recommendation matrix parameter allows the more custom recommendation matrices built around buying trends in related product groups to be used instead of the default matrix.  If a user buys a pair of shoes, he may have a certain taste in products similar to shoes that is different than his taste in other areas.  By placing the recommendation matrix concerned with the shoe products in the recommender method, the recommendation can be fine tuned based on the reality that the user recently bought shoes.  With this custom matrix parameter, one can choose which product group of interest one wants the recommendation tailored towards.
 
-    II)  recommendByProduct(customer, product)
+    rec.recommender('Steve', matrix)
 
-      This method takes a customer string and a product string as parameters.  The method then determines which product group the product belongs to, and accesses the proper recommendation matrix based on that product group.  This custom recommendation matrix is then used to return a product more focused on the customers buying patterns in relation the input product.
+**recommendByProduct(customer, product)**
 
-    III) relatedCustomers(customer)
+This method takes a customer string and a product string as parameters.  The method then determines which product group the product belongs to, and accesses the proper recommendation matrix based on that product group.  This custom recommendation matrix is then used to return a product more focused on the customers buying patterns in relation the input product.
 
-      This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on my clustering.  This result refers to the global cluster group.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
+    rec.recommendByProduct('Steve', 'shoes')
 
-    IV)  relatedCustomersByProduct(customer, product)
+**relatedCustomers(customer)**
 
-      This method takes a customer string and product string as a parameter. The method returns an array of customers who have similar buying patterns based on the input product.
+This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on my clustering.  This result refers to the global cluster group.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
 
-    V)   relatedProducts(product)
+    rec.relatedCustomers('Steve')
 
-      This method takes a product string as a parameter.  The method returns an array of products my algorithm has judged to be similar based on the aggregate purchase history of my customers.
+**relatedCustomersByProduct(customer, product)**
+
+This method takes a customer string and product string as a parameter. The method returns an array of customers who have similar buying patterns based on the input product.
+
+    rec.relatedCustomersByProduct('Steve', 'shoes')
+
+**relatedProducts(product)**
+
+This method takes a product string as a parameter.  The method returns an array of products my algorithm has judged to be similar based on the aggregate purchase history of my customers.
+
+    rec.relatedProducts('shoes')
