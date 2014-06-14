@@ -14,19 +14,17 @@
 
 [Analytics](#analysis)
 
-[Issues](#fix)
+## <a name="about"/>  What is Product-Recommender?</a>
 
-## <a name="about"/>  What is Product-Recommender
-
-Product-Recommender is an npm module that utlizes a python machine learning recommendation engine to give easy access to customer purchase recommendations.  Product-Recommender exists on the npm registry under the name "product-recommender." This repo will have the up to date version of my python recommendation engine, but if you wish to see the earlier development of the script, please check out my <a src='https://github.com/lramsey/python-recommender'>python-recommender</a> github repo.
+Product-Recommender is an npm module that utlizes a python machine learning recommendation engine to give easy access to customer purchase recommendations.  Product-Recommender exists on the npm registry under the name "product-recommender." This repo will have the up to date version of my python recommendation engine, but if you wish to see the earlier development of the script, please check out my <a href='https://github.com/lramsey/python-recommender'>python-recommender</a> github repo.
 
 The algorithm in the pyscript folder uses unsupervised machine learning to find trends within customer purchase data.  The algorithm expects three inputs: A list of customer names, a list of products under investigation, and a nested list that mentions how much of each product a customer has purchased.  As of now, the algorithm divides this product purchase quantity into two states: whether a customer has bought a product or has not bought a product.
 
-Customers are divided into clusters based on similar purchase histories through a k-means algorithm.  From these clusters, the algorithm derives recommendations by comparing an individual customer's buying patterns with the average buying patterns of his or her cluster.  In addition, k-means is also used to group together products that tend to be bought together, and more focused customer clusters are constructed based on these product groups.  To learn more about the structure of my recommendation engine, please check out my blog post, <a src ='http://lukeramsey.io/pythonrecommender'>Anatomy of a Recommendation</a>.
+Customers are divided into clusters based on similar purchase histories through a k-means algorithm.  From these clusters, the algorithm derives recommendations by comparing an individual customer's buying patterns with the average buying patterns of his or her cluster.  In addition, k-means is also used to group together products that tend to be bought together, and more focused customer clusters are constructed based on these product groups.  To learn more about the structure of my recommendation engine, please check out my blog post, <a href='http://lukeramsey.io/pythonrecommender'>Anatomy of a Recommendation</a>.
 
 Using the node.js command line interface, the python recommendation engine can be invoked, with the results streamed to node.  These results are divided into various variables based on the type of data they hold, and a user can gain access to all this raw analysis.  Or, a user may use helper methods within Product-Recommender to parse out desired information, such as which product to recommend to a consumer.
 
-## <a name='setup'/> Setup Process
+## <a name='setup'/> Setup Process</a>
 
 To utilize the Product-Recommender NPM module, the first step would be to make sure one has successfully installed node.js, npm, and a python version of >= 2.7 or >= 3.2.  To install these items, I would recommend you check out http://nodejs.org/download/ and https://www.python.org/download/.
 
@@ -34,13 +32,13 @@ In addition to these prerequisites, there are a couple python modules that you w
 
 Once all of these dependencies are installed, adding the product-recommender module to your node project is as simple as navigating to your project directory in the terminal and typing 'npm install product-recommender'.
 
-## <a name='use'/> API
+## <a name='use'/> API</a>
 
 Product-Recommender consists of three core parts, Recommendation Variables, Recommendation Engine, and Analytics.  When using product-recommender though, the first step is to make sure you have required the module on the page you are using.  As an example, I will use the variable rec to symbolize my module.
   
     var rec = require('product-recommender')
 
-## 1.  <a name='vars'/> Recommendation Variables
+## 1.  <a name='vars'/> Recommendation Variables</a>
 
 The recommendation variables hold the raw results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariables method, passing the desired variable name in as a key.
 
@@ -127,7 +125,7 @@ Similar to subClusterHelpers, but containing elements from the powerClusters arr
 
 A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
 
-## 2.<a name='learn'/> Recommendation Engine
+## 2.<a name='learn'/> Recommendation Engine</a>
 
 This section consists of the setRecVariables method, which invokes the python recommendation engine.  When the algorithm has finished streaming its results to node, the setRecVariables method then parses these results and assigns values to each of the recommendation variables.  Whenever one wants a fresh reading of the recommendation engine's analysis, one simply needs to run setRecVariables method again and the reccommendation variables will be set to the values of the latest analysis.
 
@@ -163,7 +161,7 @@ If a products argument is not used, the parameter will default to a number n whi
 
       var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
 
-## 3.<a name='analytics'/> Analytics
+## 3.<a name='analysis'/> Analytics </a>
 
 This grouping consists of methods that are designed to analyze the data held in the recommendation variables and produce a desired outcome.  These methods accomplish such goals as determining which cluster is most relevant to a customer's purchase of a particular product or producing a product recommendation for a customer based on recent buying patterns. Now I will describe the analytics functions.
     
