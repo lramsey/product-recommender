@@ -113,7 +113,7 @@ An array containing all the more focused customer clustering that is determined 
 
 An array containing a series of 7 element arrays similar to the customerClusterHelpers, but with various subClusters replacing the customerClusters.  Each element in the subClusters array will have its own subClusterHelper.
 
-** powerClusters**
+**powerClusters**
 
 An array of that contains elements from the subClusters, but has removed subClusters with a relatively low average silhouette score.
 
@@ -151,7 +151,7 @@ The names argument consists of an array of customer names/unique identifiers.  E
 
 If a names argument is not used, the parameter will default to a number n which is the length of the outer array in the history paremeter nested array.  A names array of length n will be created and filled with random unique name strings for each index in the array.
 
-      var names = [ 'Henry', 'Steve', 'Thea', 'Patrick' ]
+      var names = [ 'Steve', 'Henry', 'Thea', 'Patrick' ]
 
 **products**
       
