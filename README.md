@@ -61,6 +61,10 @@ An array containing the name string of every product.  The order of products in 
    
 A nested array containing the raw purchase history nested array passed in as a parameter to the setRecVariables method.  Each index in the outer array refers to a customer, and each index in the inner array refers to how much of a particular product a customer bought.
 
+**hasPurchased**
+   
+A nested array containing a normalized version of the history array passed in as a parameter to the setRecVariables method.  For every integer greater than 1 in the nested array, that value will be set to one.  This matrix serves as a boolean indicator on whether a customer has bought a product or not.  This matrix is used in my product recommendaton analysis, whereas the history matrix is not.
+
 **customersMap**
   
 An object that contains each customer's string name as keys, with corresponding values referring to which index that string is stored in the customers array and various matrices.
@@ -90,11 +94,11 @@ Index 0 contains the customerClusters.
 Index 1 contains an array of centroid values for each cluster, where centroid 
 refers to the average purchase trends of every customer within a group. 
 
-Index 2 contains an object that contains a key of customer names and a corresponding number referring to which cluster that customer is in.  That number refers to the index of a particular cluster in the customerClusters array.
+Index 2 contains a clusterMap object that contains a key of customer names and a corresponding number referring to which cluster that customer is in.  That number refers to the index of a particular cluster in the customerClusters array.
     
-Index 3 contains an object that contains a key of a customer name and a corresponding number that refers to what index inside that customer's cluster the customer name currently lies.
+Index 3 contains an indexMap object that contains a key of a customer name and a corresponding number that refers to what index inside that customer's cluster the customer name currently lies.
     
-Index 4 contains an array of silhouette.  The silhouette is an analysis that compares how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. These silhouettes will be a value between 0 and 1, with numbers closer to 1 indicating stronger clusters.  Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
+Index 4 contains an array of silhouettes.  A silhouette is a number between 0 and 1 that represents how much closer members of a cluster are with their own cluster center in comparison to the cluster center of the next closest cluster. The closer the silhouette is to 1, the stronger the clusters.  Each silhouette score refers to a grouping in the customerClusters array, and the order is the same as the order in that array.
 
 Index 5 contains an average of all the cluster silhouettes in index 4.  This serves as a rough indicator of the strength of all the clustering in customerClusters.
       

@@ -4,6 +4,7 @@ rec.results                = null;
 rec.customers              = null;
 rec.products               = null;
 rec.history                = null;
+rec.hasPurchased           = null;
 rec.customersMap           = null;
 rec.productsMap            = null;
 rec.productClusters        = null;
@@ -13,7 +14,7 @@ rec.customerClusterHelpers = null;
 rec.subClusters            = null;
 rec.subClusterHelpers      = null;
 rec.powerClusters          = null;
-rec.powerClustersHelpers    = null;
+rec.powerClustersHelpers   = null;
 rec.powerRecMatrix         = null;
 
 module.exports = Recommender = {
@@ -34,17 +35,18 @@ module.exports = Recommender = {
       rec.results                = results;
       rec.customers              = results[0];
       rec.products               = results[4];
-      rec.history                = results[11];
+      rec.history                = matrix;
+      rec.hasPurchased           = results[11];
       rec.customersMap           = results[1];
       rec.productsMap            = results[3];
       rec.productClusters        = results[2];
       rec.customerClusters       = results[9];
       rec.recommendationMatrix   = results[5];
-      rec.customerClusterHelpers = results[8];
+      rec.customerClusterHelpers = results[6];
       rec.subClusters            = results[9];
-      rec.subClusterHelpers      = results[6] + results[7];
+      rec.subClusterHelpers      = results[7] + results[8];
       rec.powerClusters          = results[10];
-      rec.powerClusterHelpers    = results[6];
+      rec.powerClusterHelpers    = results[8];
       rec.powerRecMatrix         = results[5];
 
       args = Array.prototype.slice.call(arguments,4);

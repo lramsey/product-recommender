@@ -14,22 +14,25 @@ matrix = ast.literal_eval(args.matrix)
 results = i.init(names, products, matrix)
 if not isinstance(results[2], list):
     results[2] = results[2].tolist()
-for m in range(6,9):
-    for l in range(0, len(results[m])):
-        if not isinstance(results[m][l][0], list):
-            results[m][l][0] = results[m][l][0].tolist()
-        if not isinstance(results[m][l][1], list):
-            results[m][l][1] = results[m][l][1].tolist()
-        else:
-            for n in range(0,len(results[m][l][1])):
-                if not isinstance(results[m][l][1][n], list):
-                    print m
-                    print results[m][0][l][1][n]
-                    results[m][l][1][n] = results[m][l][1][n].tolist()
-        for k in range(0, len(results[m][l][3])):
-            results[m][l][3][k] = str(results[m][l][3][k])
-        if not isinstance(results[2], float):
-            results[m][l][5] = float(results[m][l][5])
-results[8] = results[8][0]
+for l in range(6,9):
+    if len(results[l]) > 0:
+        for m in range(0,len(results[l])):
+            for n in range(0,len(results[l][m][0])):
+                for o in range(0,len(results[l][m][0][n])):
+                    results[l][m][0][n][o] = results[l][m][0][n][o].name
+            
+            for n in range(0,len(results[l][m][1])):
+                results[l][m][1][n] = results[l][m][1][n].tolist()
+            
+            results[l][m][5] = float(results[l][m][5])
+
+# for l in range(9,12):
+#     if len(results[l]) > 0:
+#         # for m in range(0,len(results[l])):
+#             # for n in range(0, len(results[l][m])):
+#                 # for o in range(0, len(results[l][m][n][0])):
+#                     # print results[l][m][n][o]
+#         print results[l][0][0][0]
+# if len(results[8]) > 0:
 
 print j.encode(results)

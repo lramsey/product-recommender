@@ -57,11 +57,11 @@ def run(names):
 
     powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
     results.append(powerRecMatrix)
-    results.append(powerClustersHelpers)
-    results.append(subClustersHelpers)
     results.append([customerClustersHelpers])
+    results.append(subClustersHelpers)
+    results.append(powerClustersHelpers)
     customerClusters = [customerClustersHelpers[0][0]] 
-    results.append(customerClusters)
+    results.append([customerClusters])
     subClusters = []
     for i in range(0, len(subClustersHelpers)):
         subClusters.append(subClustersHelpers[i][0])
