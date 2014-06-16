@@ -164,7 +164,7 @@ If a products argument is not used, the parameter will default to a number n whi
 
       var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
 
-## 3.<a name='analysis'/> Analytics </a>
+## 3.<a name='analysis'/> Analytics (in development) </a>
 
 This grouping consists of methods that are designed to analyze the data held in the recommendation variables and produce a desired outcome.  These methods accomplish such goals as determining which cluster is most relevant to a customer's purchase of a particular product or producing a product recommendation for a customer based on recent buying patterns. Now I will describe the analytics functions.
     
