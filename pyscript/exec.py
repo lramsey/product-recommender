@@ -24,15 +24,13 @@ for l in range(6,9):
             for n in range(0,len(results[l][m][1])):
                 results[l][m][1][n] = results[l][m][1][n].tolist()
             
+            for n in range(0,len(results[l][m][4])):
+                results[l][m][4][n] = float(results[l][m][4][n])
+
             results[l][m][5] = float(results[l][m][5])
 
-# for l in range(9,12):
-#     if len(results[l]) > 0:
-#         # for m in range(0,len(results[l])):
-#             # for n in range(0, len(results[l][m])):
-#                 # for o in range(0, len(results[l][m][n][0])):
-#                     # print results[l][m][n][o]
-#         print results[l][0][0][0]
-# if len(results[8]) > 0:
+results[9] = results[9].tolist()
+results[6] = results[6][0]
 
-print j.encode(results)
+print results[9][0][0]
+# print j.encode(results)

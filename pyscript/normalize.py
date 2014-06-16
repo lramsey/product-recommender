@@ -48,7 +48,7 @@ def merge(clusts, centroids, mats, maps, i):
             index = j
     for j in range(0, len(clusts[i])):
         if not isinstance(clusts[index],list):
-            clusts[index].tolist()
+            clusts[index] = clusts[index].tolist()
         clusts[index].append(clusts[i][j])
     
     newMat = []

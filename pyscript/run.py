@@ -10,6 +10,7 @@ transpose = []
 def run(names):
     global products
     products = p.products
+    # indexes 0 and 1
     results = [names, c.customersMap]
 
     global transpose
@@ -22,8 +23,11 @@ def run(names):
 
     inputs = st.subMatrices(productClusters)
     productClusters = n.normalizeProdClusters(productClusters, centroids, inputs[0], inputs[1], 0.2, 0.4)
+    # index 2
     results.append(productClusters)
+    # index 3
     results.append(p.productsMap)
+    # index 4
     results.append(products)
 
     inputs = st.subMatrices(productClusters)
@@ -41,14 +45,12 @@ def run(names):
     customerClustersHelpers = st.createSubclustersHelpers(p.products, c.matrix, p.productsMap)
     customerClustersHelpers.append(r.buildRecommendations(names,[customerClustersHelpers]))
     powerClustersHelpers = []
-    powerSil = []
     powerI = []
     for i in range(0, len(subClustersHelpers)):
-        if subClustersHelpers[i][4] >= customerClustersHelpers[4]:
+        if subClustersHelpers[i][5] >= customerClustersHelpers[5]:
             powerClustersHelpers.append(subClustersHelpers[i])
-            powerSil.append(subClustersHelpers[i][4])
             powerI.append(i)
-    if(len(powerSil) == 0):
+    if(len(powerClustersHelpers) == 0):
         return 'again'
     displacement = 0
     for i in range(0,len(powerI)):
@@ -56,19 +58,15 @@ def run(names):
         displacement += 1
 
     powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
+    # index 5
     results.append(powerRecMatrix)
+    # index 6
     results.append([customerClustersHelpers])
+    # index 7
     results.append(subClustersHelpers)
+    # index 8
     results.append(powerClustersHelpers)
-    customerClusters = [customerClustersHelpers[0][0]] 
-    results.append([customerClusters])
-    subClusters = []
-    for i in range(0, len(subClustersHelpers)):
-        subClusters.append(subClustersHelpers[i][0])
-    results.append(subClusters)
-    powerClusters = []
-    for i in range(0,len(powerClustersHelpers)):
-        powerClusters.append(powerClustersHelpers[i][0])
-    results.append(powerClusters)
+    # index 9
     results.append(c.matrix)
+    
     return results
