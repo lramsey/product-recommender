@@ -3,7 +3,7 @@ var rec = {};
 rec.rawResults             = null;
 rec.customers              = null;
 rec.products               = null;
-rec.history                = null;
+rec.purchaseHistory        = null;
 rec.hasPurchased           = null;
 rec.customersMap           = null;
 rec.productsMap            = null;
@@ -41,7 +41,7 @@ module.exports = Recommender = {
       rec.rawResults             = results;
       rec.customers              = results[0];
       rec.products               = results[4];
-      rec.history                = matrix;
+      rec.purchaseHistory        = matrix;
       rec.hasPurchased           = results[9];
       rec.customersMap           = results[1];
       rec.productsMap            = results[3];

@@ -45,7 +45,7 @@ To receive an array containing all of the recommendation variables, one can call
 
 Initially the reccommendation variables will be set to null, until a call is made to launch the python recommendation engine.  Now, I will describe the recommendation variables.
 
-**results**
+**rawResults**
 
 An array containing the raw results sent from my product recommendation algorithm.  These results are portrayed in the succeeding variables
   
@@ -57,7 +57,7 @@ An array containing the name string of every customer.  The order of customers i
 
 An array containing the name string of every product.  The order of products in this array matches the product order in the history matrix.
 
-**history**
+**purchaseHistory**
    
 A nested array containing the raw purchase history nested array passed in as a parameter to the setRecVariables method.  Each index in the outer array refers to a customer, and each index in the inner array refers to how much of a particular product a customer bought.
 
@@ -123,6 +123,10 @@ Similar to subClusterHelpers, but containing elements from the powerClusters arr
 **powerRecMatrix**
 
 A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
+
+**results**
+
+An array containing all of the above recommendation variables except for rawResults.
 
 ## 2.<a name='learn'/> Recommendation Engine</a>
 

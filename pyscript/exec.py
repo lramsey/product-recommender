@@ -32,5 +32,4 @@ for l in range(6,9):
 results[9] = results[9].tolist()
 results[6] = results[6][0]
 
-print results[9][0][0]
-# print j.encode(results)
+print j.encode(results)
