@@ -46,10 +46,16 @@ def run(names):
     customerClustersHelpers.append(r.buildRecommendations(names,[customerClustersHelpers]))
     powerClustersHelpers = []
     powerI = []
+    powerCount = 0
+    productClusterLocator = []
     for i in range(0, len(subClustersHelpers)):
         if subClustersHelpers[i][5] >= customerClustersHelpers[5]:
             powerClustersHelpers.append(subClustersHelpers[i])
             powerI.append(i)
+            productClusterLocator[i] = ['power', powerCount]
+            powerCount += 1
+        else:
+            productClusterLocator.append(['sub', i - powerCount])
     if(len(powerClustersHelpers) == 0):
         return 'again'
     displacement = 0
@@ -68,5 +74,9 @@ def run(names):
     results.append(powerClustersHelpers)
     # index 9
     results.append(c.matrix)
+    # index 10
+    productClustersMap = st.createClusterMap(productClusters)
+    results.append(productClustersMap)
+    results.append(productClusterLocator)
     
     return results

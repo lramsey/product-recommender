@@ -46,3 +46,10 @@ def createSubclustersHelpers(indexMap, subMatrix, aMap):
     # index 5
     clust.append(avgSils)
     return clust
+
+def createClusterMap(clusters):
+    clusterMap = {}
+    for i in range(0, len(clusters)):
+        for j in range(0, len(clusters[i])):
+            clusterMap[clusters[i][j]] = i
+    return clusterMap

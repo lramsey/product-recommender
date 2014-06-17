@@ -184,13 +184,13 @@ This method takes a customer string and a product string as parameters.  The met
 
 **relatedCustomers(customer)**
 
-This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on my clustering.  This result refers to the global cluster group.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
+This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on clustering.  This result refers to the global cluster group.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
 
     rec.relatedCustomers('Steve')
 
 **relatedCustomersByProduct(customer, product)**
 
-This method takes a customer string and product string as a parameter. The method returns an array of customers who have similar buying patterns based on the input product.
+This method takes a customer string and product string as a parameter. The method returns that customer's cluster based on the input product.  The members of this cluster will have similar buying patterns with the input customer in terms of products similar to the product parameter.
 
     rec.relatedCustomersByProduct('Steve', 'shoes')
 

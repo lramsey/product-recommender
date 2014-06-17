@@ -11,10 +11,7 @@ def recommender(name):
     else:
         recommendation = recommendationMatrix[c.customersMap[name]].pop()
         attraction = recommendation.keys()[0]
-        indexes = recommendation[attraction]
-        cluster = goodClusters[indexes[1]]
-        indexMap = cluster[3]
-        product = indexMap[indexes[0]]
+        product = recommendation[attraction]
         return product
 
 def buildRecommendations(names, clusters):
@@ -25,8 +22,7 @@ def buildRecommendations(names, clusters):
     for i in range(0, len(names)):
         recObj = {}
         recommendations = []
-        target   = c.customers[i]
-        history  = target.purchasesArr
+        history  = c.matrix[i]
         for j in range(0, len(clusters)):
             recommendations = recommendations + clusterRecommender(names[i], history, clusters[j], j, recObj)
         recommendations.sort()
@@ -48,13 +44,13 @@ def findDiffs(hist, avg, sil, index, recObj):
         normalized = sil * math.fabs(hist[i]-avg[i])
         val = recObj.get(p.products[i],0)
         if normalized > val:
-            normals.append({normalized: [i, index]})
+            normals.append({normalized: p.products[i]})
             recObj[p.products[i]] = normalized
     normals.sort()
     return normals
 
 def find3Diffs(hist, avg, sil, index):
-    results = [{'0': [-1, index]},{'0': [-1, index]},{'0': [-1, index]}]
+    results = [{'0': 'null'},{'0': 'null'},{'0': 'null'}]
     for i in range(0,len(avg)):
         normalized = sil * math.fabs(hist[i]-avg[i])
         key1 = float(results[2].keys()[0])
@@ -63,10 +59,10 @@ def find3Diffs(hist, avg, sil, index):
         if normalized > key1:
             results[0] = results[1]
             results[1] = results[2]
-            results[2] = {str(normalized): [i, index]}
+            results[2] = {str(normalized): p.products[i]}
         elif normalized > key2:
             results[0] = results[1]
-            results[1] = {str(normalized): [i, index]}
+            results[1] = {str(normalized): p.products[i]}
         elif normalized > key3:
-            results[0] = {str(normalized): [i, index]}
+            results[0] = {str(normalized): p.products[i]}
     return results
