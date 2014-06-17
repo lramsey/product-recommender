@@ -35,9 +35,9 @@ Product-Recommender consists of three core parts, Recommendation Variables, Reco
 
 ## 1.  <a name='vars'/> Recommendation Variables</a>
 
-The recommendation variables hold the raw results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariables method, passing the desired variable name in as a key.
+The recommendation variables hold the raw results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariable method, passing the desired variable name in as a key.
 
-    rec.getRecVariables(key);
+    rec.getRecVariable(key);
 
 To receive an array containing all of the recommendation variables, one can call the getRecKeys() method. 
 
@@ -76,6 +76,10 @@ An object that contains each product's string name as keys, with corresponding v
 **productClusters**
   
  A nested array structure.  Each array refers to a grouping of products that the product-recommendation algorithm has determined are similar based on aggregate customer buying patterns.
+
+**productClustersMap**
+
+An object that takes a product as a key.  The corresponding value would be the index one can use in the productClusters array to find the group of products most similar to the input product.
 
 **customerClusters**
   
@@ -116,13 +120,17 @@ An array containing a series of 7 element arrays similar to the customerClusterH
 
 An array of that contains elements from the subClusters, but has removed subClusters with a relatively low average silhouette score.
 
-**powerClusterHelpers**
+**powerClustersHelpers**
 
 Similar to subClusterHelpers, but containing elements from the powerClusters array.
 
 **powerRecMatrix**
 
 A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
+
+**pastRecommendations**
+
+An object that contains a key for each customer in the dataset.  Each customer key has a corresponding value that is an object.  The inner object contains keys with a true for each product which has been recommended to the designated customer.
 
 **results**
 
@@ -164,7 +172,7 @@ If a products argument is not used, the parameter will default to a number n whi
 
       var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
 
-## 3.<a name='analysis'/> Analytics (in development) </a>
+## 3.<a name='analysis'/> Analytics</a>
 
 This grouping consists of methods that are designed to analyze the data held in the recommendation variables and produce a desired outcome.  These methods accomplish such goals as determining which cluster is most relevant to a customer's purchase of a particular product or producing a product recommendation for a customer based on recent buying patterns. Now I will describe the analytics functions.
     

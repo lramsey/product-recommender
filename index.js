@@ -20,15 +20,16 @@ rec.productClustersMap     = null;
 rec.customerClusterHelpers = null;
 rec.customerClusters       = null;
 rec.recommendationMatrix   = null;
-rec.subClusterHelpers      = null;
+rec.subClustersHelpers     = null;
 rec.subClusters            = null;
 rec.powerClustersHelpers   = null;
 rec.powerClusters          = null;
 rec.powerRecMatrix         = null;
+rec.pastRecommendations    = null;
 rec.results                = null;
 
 // can only directly access these keys through below methods
-Recommender.getRecVariables = function(key){
+Recommender.getRecVariable = function(key){
   if(rec[key] === undefined){
     throw new Error('not a valid recommendation variable');
   } else if(rec[key] === null){
@@ -65,13 +66,13 @@ Recommender.setRecVariables = function(matrix, cb, names, prods){
     output += data;
   });
   python.stdout.on('close', function(){
-    _buildRecVariables(output);
+    _buildRecVariables(output, matrix);
     args = Array.prototype.slice.call(arguments,4);
     cb.apply(this,args);
   });
 };
 
-_buildRecVariables = function(output){
+_buildRecVariables = function(output, matrix){
   var results = JSON.parse(output);
 
   rec.rawResults             = results;
@@ -87,32 +88,36 @@ _buildRecVariables = function(output){
   rec.customerClusters       = rec.customerClusterHelpers[0];
   rec.recommendationMatrix   = rec.customerClusterHelpers[6];
   
-  rec.subClusterHelpers      = [];
+  rec.subClustersHelpers     = [];
   var productClusterLocator  = results[11];
   for(i = 0; i < productClusterLocator.length; i++){
     var locator = productClusterLocator[i];
     if(locator[0] === 'sub'){
-      rec.subClusterHelpers.push(results[7][locator[1]]);
+      rec.subClustersHelpers.push(results[7][locator[1]]);
     } else if(locator[0] === 'power'){
-      rec.subClusterHelpers.push(results[8][locator[1]]);
+      rec.subClustersHelpers.push(results[8][locator[1]]);
     }
   }
   
   rec.subClusters            = [];
-  for(i = 0; i < rec.subClusterHelpers.length; i++){
-    rec.subClusters.push(rec.subClusterHelpers[i][0]);
+  for(i = 0; i < rec.subClustersHelpers.length; i++){
+    rec.subClusters.push(rec.subClustersHelpers[i][0]);
   }
-  rec.powerClusterHelpers    = results[8];
+  rec.powerClustersHelpers   = results[8];
   rec.powerClusters          = [];
-  for(i = 0; i < rec.powerClusterHelpers.length; i++){
-    rec.powerClusters.push(rec.powerClusterHelpers[i][0]);
+  for(i = 0; i < rec.powerClustersHelpers.length; i++){
+    rec.powerClusters.push(rec.powerClustersHelpers[i][0]);
   }
   rec.powerRecMatrix         = results[5];
+  rec.pastRecommendations    = {};
+  for(i=0; i< rec.customers.length; i++){
+    rec.pastRecommendations[rec.customers[i]] = {};
+  }
   
   rec.results                = [rec.customers, rec.products, rec.purchaseHistory, rec.hasPurchased, rec.customersMap,
                                 rec.productsMap, rec.productClusters, rec.productClustersMap, rec.customerClusterHelpers,
-                                rec.customerClusters, rec.recommendationMatrix, rec.subClusterHelpers, rec.subClusters,
-                                rec.powerClusterHelpers, rec.powerClusters, rec.powerRecMatrix];
+                                rec.customerClusters, rec.recommendationMatrix, rec.subClustersHelpers, rec.subClusters,
+                                rec.powerClustersHelpers, rec.powerClusters, rec.powerRecMatrix, rec.pastRecommendations];
 };
 
 /* ------------------------------------------------------------------------------------*/
@@ -125,9 +130,14 @@ Recommender.recommender = function(name, matrix){
   matrix = matrix || rec.recommendationMatrix;
   _nameChecker(name);
   _recVariableChecker();
-  var recommendation = recommendationMatrix[customersMap[name]].pop();
+  var recommendation = matrix[rec.customersMap[name]].pop();
   var attraction = Object.keys(recommendation)[0];
   var product = recommendation[attraction];
+  if(rec.pastRecommendations[name][product] === true){
+    return this.recommender(name,matrix);
+  } else{
+    rec.pastRecommendations[name][product] = true;
+  }
   return product;
 };
 
@@ -138,16 +148,16 @@ Recommender.recommendByProduct = function(name, product){
   }
   else{
     index = _productClusterFinder(product);
-    matrix = rec.subClusterHelpers[index][6];
+    matrix = rec.subClustersHelpers[index][6];
   }
-  this.recommender(name, matrix);
+  return this.recommender(name, matrix);
 };
 
 Recommender.relatedCustomers = function(name){
   _nameChecker(name);
   _recVariableChecker();
-  var index = customerClusterHelpers[2][name];
-  var cluster = customerClusters[index];
+  var index = rec.customerClusterHelpers[2][name];
+  var cluster = rec.customerClusters[index];
   return cluster;
 };
 
@@ -156,9 +166,9 @@ Recommender.relatedCustomersByProduct = function(name, product){
   _productChecker(product);
   _recVariableChecker();
   var subClustIndex = _productClusterFinder(product);
-  var map = rec.subClusterHelpers[index][2];
+  var map = rec.subClustersHelpers[index][2];
   var cluster = rec.subClusters[index];
-  var related =cluster[map[customer]];
+  var related =cluster[map[name]];
   return related;
 };
 

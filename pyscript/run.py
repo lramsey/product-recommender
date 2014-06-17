@@ -52,7 +52,7 @@ def run(names):
         if subClustersHelpers[i][5] >= customerClustersHelpers[5]:
             powerClustersHelpers.append(subClustersHelpers[i])
             powerI.append(i)
-            productClusterLocator[i] = ['power', powerCount]
+            productClusterLocator.append(['power', powerCount])
             powerCount += 1
         else:
             productClusterLocator.append(['sub', i - powerCount])
