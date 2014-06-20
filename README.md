@@ -37,9 +37,9 @@ When using product-recommender though, the first step is to make sure you have r
 
 The three sections are listed below.  Pleas use these links to help in your navigation.
 
-[Recommendation Engine](#learn)
-[Analytics](#analysis)
-[Recommendation Variables](#vars)
+[Recommendation Engine](#learn)  
+[Analytics](#analysis)  
+[Recommendation Variables](#vars)  
 
 ## 1.<a name='learn'/> Recommendation Engine
 
@@ -221,5 +221,5 @@ A recommendation matrix built by compiling together the results from the powerCl
 An object that contains a key for each customer in the dataset.  Each customer key has a corresponding value that is an object.  The inner object contains keys with a true for each product which has been recommended to the designated customer.
 
 
-[API](#use)
-[Contents](#contents)
+[API](#use)  
+[Contents](#contents)  
