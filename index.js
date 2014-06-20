@@ -8,6 +8,7 @@ var Recommender = {};
 /*
 /* ------------------------------------------------------------------------------------*/
 
+rec.results                = null;
 rec.rawResults             = null;
 rec.customers              = null;
 rec.products               = null;
@@ -26,7 +27,6 @@ rec.powerClustersHelpers   = null;
 rec.powerClusters          = null;
 rec.powerRecMatrix         = null;
 rec.pastRecommendations    = null;
-rec.results                = null;
 
 // can only directly access these keys through below methods
 Recommender.getRecVariable = function(key){
