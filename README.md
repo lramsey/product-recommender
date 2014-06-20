@@ -119,7 +119,7 @@ This method takes a product string as a parameter.  The method returns an array 
 
 ## 3.  <a name='vars'/> Recommendation Variables
 
-The recommendation variables hold the fine graine results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariable method, passing the desired variable name in as a key.
+The recommendation variables hold the fine-grained results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariable method, passing the desired variable name in as a key.
 
     rec.getRecVariable(key);
 
