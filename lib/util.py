@@ -1,3 +1,4 @@
+import numpy as np
 import math
 
 alphabet  = ['b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -49,3 +50,14 @@ def dupCheck(clusters):
     for i in range(0,len(prods)):
         if(check[prods[i]][0] > 1):
             print 'failure: ' + prods[i] + ' -- ' + str(check[prods[i]])
+
+def dist(v1, v2):
+    comb = (v1 + v2)**2.
+    distance = np.sum(comb)**(1./2)
+    return distance
+
+def findCenter(points):
+    point = points[0]
+    for i in range(1,len(points)):
+        point += points[i]
+    return point/len(points + 0.)

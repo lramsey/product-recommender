@@ -1,6 +1,7 @@
+import customers as c
 import products  as p
-import numpy     as np
 import random    as r
+import numpy     as np
 
 matrix       = [[]]
 items        = []
@@ -46,7 +47,9 @@ def centerPoint(populus):
     return point
 
 def customerPoint(populus, i, j):
-    return populus[j].purchasesArr[i]
+    cmap = c.customersMap[populus[j].name]
+    mat = matrix[cmap]
+    return mat[i]
 
 def productPoint(populus, i, j):
     imap = itemsMap[populus[j]]

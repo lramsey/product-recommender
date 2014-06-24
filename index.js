@@ -60,7 +60,7 @@ Recommender.setRecVariables = function(matrix, cb, names, prods){
 
   var python = require('child_process').spawn(
     'python',
-    [__dirname + '/pyscript/exec.py', names, prods, mat]);
+    [__dirname + '/lib/exec.py', names, prods, mat]);
   output = '';
   python.stdout.on('data', function(data){
     output += data;

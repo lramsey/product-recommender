@@ -1,4 +1,5 @@
 import products     as p
+import util         as u
 import clustering   as cl
 import structure    as st
 import numpy        as np
@@ -40,7 +41,7 @@ def merge(clusts, centroids, mats, maps, i):
     index = -1
     cent = centroids[i]
     for j in range(0, len(centroids)):
-        distance = dist(cent,centroids[j])
+        distance = u.dist(cent,centroids[j])
         if (i == j):
             continue
         elif (minDist == -1) or distance < minDist:
@@ -56,7 +57,7 @@ def merge(clusts, centroids, mats, maps, i):
     st.redoMatrix(clusts, index, newMat, newMap)
     mats[index] = np.array(newMat)
     maps[index] = newMap
-    newCent = findCenter(mats[index])
+    newCent = u.findCenter(mats[index])
     centroids[index] = newCent
 
     maps.pop(i)
@@ -85,15 +86,3 @@ def dissolve(clusts, centroids, mats, maps, i):
         st.redoMatrix(clusts,len(clusts)-1,newMat, newMap)
         mats.append(newMat)
         maps.append(newMap)
-
-
-def dist(v1, v2):
-    comb = (v1 + v2)**2.
-    distance = np.sum(comb)**(1./2)
-    return distance
-
-def findCenter(points):
-    point = points[0]
-    for i in range(1,len(points)):
-        point += points[i]
-    return point/len(points + 0.)
