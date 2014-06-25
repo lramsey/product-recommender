@@ -1,7 +1,7 @@
 import products as p
 import util     as u
 import numpy    as np
-import math
+# import math
 
 customers = []
 customersMap = {}
@@ -23,28 +23,28 @@ class Customer(object):
         self.purchases[item] = prodCount
         self.purchasesArr[p.productsMap[item]] = prodCount
 
-def customerSim(person1, person2):
-    one = person1.purchases
-    two = person2.purchases
-    intersection = 0.0
-    union = 0.0
-    for i in one:
-        if one[i] > 0 and two[i] > 0:
-            union += 1
-            intersection += 1;
-        elif one[i] > 0 or two[i] > 0:
-            union += 1
+# def customerSim(person1, person2):
+#     one = person1.purchases
+#     two = person2.purchases
+#     intersection = 0.0
+#     union = 0.0
+#     for i in one:
+#         if one[i] > 0 and two[i] > 0:
+#             union += 1
+#             intersection += 1;
+#         elif one[i] > 0 or two[i] > 0:
+#             union += 1
             
-    return math.tanh(math.sqrt(union - intersection))
+#     return math.tanh(math.sqrt(union - intersection))
 
-def customerMatrixiser():
-    customerMatrix = []
-    for i in range(0, len(customers)):
-        sims = []
-        for j in range(0,len(customers)):
-            sims.append(customerSim(customers[i], customers[j]))
-        customerMatrix.append(sims)
-    return np.array(customerMatrix)
+# def customerMatrixiser():
+#     customerMatrix = []
+#     for i in range(0, len(customers)):
+#         sims = []
+#         for j in range(0,len(customers)):
+#             sims.append(customerSim(customers[i], customers[j]))
+#         customerMatrix.append(sims)
+#     return np.array(customerMatrix)
 
 def nearestNeighbors(customer, num, customerMatrix):
     index = customersMap[customer]

@@ -48,21 +48,3 @@ def findDiffs(hist, avg, sil, index, recObj):
             recObj[p.products[i]] = normalized
     normals.sort()
     return normals
-
-def find3Diffs(hist, avg, sil, index):
-    results = [{'0': 'null'},{'0': 'null'},{'0': 'null'}]
-    for i in range(0,len(avg)):
-        normalized = sil * math.fabs(hist[i]-avg[i])
-        key1 = float(results[2].keys()[0])
-        key2 = float(results[1].keys()[0])
-        key3 = float(results[0].keys()[0])
-        if normalized > key1:
-            results[0] = results[1]
-            results[1] = results[2]
-            results[2] = {str(normalized): p.products[i]}
-        elif normalized > key2:
-            results[0] = results[1]
-            results[1] = {str(normalized): p.products[i]}
-        elif normalized > key3:
-            results[0] = {str(normalized): p.products[i]}
-    return results

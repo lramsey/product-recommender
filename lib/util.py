@@ -38,21 +38,21 @@ def binarySearch(item, arr, low=0, high=-1):
     else:
         return (low+high)/2
 
-def dupCheck(clusters):
-    check = {}
-    for i in range(0,len(clusters)):
-        for j in range(0,len(clusters[i])):
-            res = check.get(clusters[i][j], [0,-1])
-            res[0] += 1
-            res[1] = i
-            check[clusters[i][j]] = res
-    prods = check.keys()
-    for i in range(0,len(prods)):
-        if(check[prods[i]][0] > 1):
-            print 'failure: ' + prods[i] + ' -- ' + str(check[prods[i]])
+# def dupCheck(clusters):
+#     check = {}
+#     for i in range(0,len(clusters)):
+#         for j in range(0,len(clusters[i])):
+#             res = check.get(clusters[i][j], [0,-1])
+#             res[0] += 1
+#             res[1] = i
+#             check[clusters[i][j]] = res
+#     prods = check.keys()
+#     for i in range(0,len(prods)):
+#         if(check[prods[i]][0] > 1):
+#             print 'failure: ' + prods[i] + ' -- ' + str(check[prods[i]])
 
 def dist(v1, v2):
-    comb = (v1 + v2)**2.
+    comb = (v1 - v2)**2.
     distance = np.sum(comb)**(1./2)
     return distance
 

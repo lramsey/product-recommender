@@ -6,44 +6,31 @@ import structure    as st
 import clustering   as cl
 
 transpose = []
+names = []
+products = []
 
-def run(names):
-    global products
-    products = p.products
-    # indexes 0 and 1
-    results = [names, c.customersMap]
-
+def buildProductClusters():
     global transpose
     transpose = c.matrix.transpose()
     cl.__init__(transpose, p.products)
     catNum = len(p.products)/8 + 1
     outputs = cl.kMeans(catNum,8)
-    productClusters = outputs[0]
-    centroids = outputs[1]
+    return outputs
 
-    inputs = st.subMatrices(productClusters)
-    productClusters = n.normalizeProdClusters(productClusters, centroids, inputs[0], inputs[1], 0.2, 0.4)
-    # index 2
-    results.append(productClusters)
-    # index 3
-    results.append(p.productsMap)
-    # index 4
-    results.append(products)
+def buildCustomerHelpers():
+    customerClustersHelpers = st.createClusterHelpers(p.products, c.matrix, p.productsMap)
+    customerClustersHelpers.append(r.buildRecommendations(names,[customerClustersHelpers]))
+    return customerClustersHelpers
 
-    inputs = st.subMatrices(productClusters)
-    subMats = inputs[0]
-    maps = inputs[1]
-    indexMap = inputs[2]
-
+def buildSubHelpers(indexMaps, subMatrices, aMaps):
     subClustersHelpers = []
-    for i in range(0, len(subMats)):
-        subCluster = st.createSubclustersHelpers(indexMap[i], subMats[i], maps[i])
+    for i in range(0, len(subMatrices)):
+        subCluster = st.createClusterHelpers(indexMaps[i], subMatrices[i], aMaps[i])
         subCluster.append(r.buildRecommendations(names, [subCluster]))
         subClustersHelpers.append(subCluster)
+    return subClustersHelpers
 
-
-    customerClustersHelpers = st.createSubclustersHelpers(p.products, c.matrix, p.productsMap)
-    customerClustersHelpers.append(r.buildRecommendations(names,[customerClustersHelpers]))
+def buildPowerHelpers(subClustersHelpers, customerClustersHelpers):
     powerClustersHelpers = []
     powerI = []
     powerCount = 0
@@ -56,27 +43,68 @@ def run(names):
             powerCount += 1
         else:
             productClusterLocator.append(['sub', i - powerCount])
-    if(len(powerClustersHelpers) == 0):
-        return 'again'
     displacement = 0
     for i in range(0,len(powerI)):
         subClustersHelpers.pop(powerI[i]-displacement)
         displacement += 1
 
-    powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
-    # index 5
-    results.append(powerRecMatrix)
-    # index 6
-    results.append([customerClustersHelpers])
-    # index 7
-    results.append(subClustersHelpers)
-    # index 8
-    results.append(powerClustersHelpers)
-    # index 9
-    results.append(c.matrix)
-    # index 10
-    productClustersMap = st.createClusterMap(productClusters)
-    results.append(productClustersMap)
-    results.append(productClusterLocator)
+    return [powerClustersHelpers, productClusterLocator]
+
+def run(nameList):
+    global products
+    products = p.products
+    global names
+    names = nameList
     
-    return results
+    outputs = buildProductClusters()
+    productClusters = outputs[0]
+    centroids = outputs[1]
+
+    inputs = st.subMatrices(productClusters)
+    productClusters = n.normalizeProdClusters(productClusters, centroids, inputs[0], inputs[1], 0.2, 0.4)
+
+    inputs = st.subMatrices(productClusters)
+    subMats = inputs[0]
+    maps = inputs[1]
+    indexMap = inputs[2]
+
+    customerClustersHelpers = buildCustomerHelpers()
+    subClustersHelpers = buildSubHelpers(indexMap, subMats, maps)
+
+    powerups = buildPowerHelpers(subClustersHelpers,customerClustersHelpers)
+    powerClustersHelpers = powerups[0]
+    productClusterLocator = powerups[1]
+
+    powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
+    productClustersMap = st.createClusterMap(productClusters)
+    
+    if(len(powerClustersHelpers) == 0):
+        return 'again'
+    else:
+        results = []
+        # index 0
+        results.append(names) 
+        # index 1
+        results.append(c.customersMap)
+        # index 2
+        results.append(productClusters)
+        # index 3
+        results.append(p.productsMap)
+        # index 4
+        results.append(products)
+        # index 5
+        results.append(powerRecMatrix)
+        # index 6
+        results.append([customerClustersHelpers])
+        # index 7
+        results.append(subClustersHelpers)
+        # index 8
+        results.append(powerClustersHelpers)
+        # index 9
+        results.append(c.matrix)
+        # index 10
+        results.append(productClustersMap)
+        # index 11
+        results.append(productClusterLocator)
+    
+        return results

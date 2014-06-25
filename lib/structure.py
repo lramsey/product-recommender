@@ -1,8 +1,8 @@
-import products     as p
-import customers    as c
-import silhouette   as s 
-import clustering   as cl
-import numpy        as np
+import products       as p
+import customers      as c
+import silhouette     as s
+import clustering     as cl
+import numpy          as np
 import run
 
 def redoMatrix(clusters, i, clusterMat=[], clusterMap={}, indexProds=[]):
@@ -26,7 +26,7 @@ def subMatrices(clusters):
         indexMap.append(indexProds)
     return [results, maps, indexMap]
 
-def createSubclustersHelpers(indexMap, subMatrix, aMap):
+def createClusterHelpers(indexMap, subMatrix, aMap):
     cl.__init__(subMatrix, c.customers, aMap)
     clust = []
     results = cl.kMeans(25,8)
@@ -40,7 +40,7 @@ def createSubclustersHelpers(indexMap, subMatrix, aMap):
     clust.append(cl.clusterMap)
     # index 3
     clust.append(indexMap)
-    avgSils = s.averageSilhouettes(clust[0], subMatrix)
+    avgSils = s.averageSilhouettes(clust[0], subMatrix, centroids)
     # index 4
     clust.append(s.silhouettesList)
     # index 5

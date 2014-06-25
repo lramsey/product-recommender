@@ -6,7 +6,9 @@ import run
 names = []
 products = []
 
-def addCustomers(names):
+def addCustomers(nameList):
+    global names
+    names = nameList
     for i in range(0, len(names)):
         c.Customer(names[i]) 
         c.customersMap[names[i]] = i
@@ -19,22 +21,21 @@ def dataBuilder(matrix):
                 c.customers[i].purchaseItem(products[j])
                 num -= 1
 
-def buildHistory(nameList, prodList, matrix):
-    global names
-    names = nameList
-    global products
-    products = prodList
+def init(nameList, productList, matrix):
+    if isinstance(productList, int):
+        products = m.mockProducts(productList)
     p.addProducts(products)
-    addCustomers(names)
-    dataBuilder(matrix)
 
-def init(names, products, matrix):
-    if isinstance(names, int):
-        names = m.mockData(names, products)
-    else:
+    if isinstance(nameList, int):
+        nameList = m.mockCustomers(nameList)
+    addCustomers(nameList)
+
+    if isinstance(matrix, list):
         '''expected data: list of customers, list of products, list customer arrays containing 
         product purchases in same order as product list.'''
-        buildHistory(names, products, matrix);
+        dataBuilder(matrix);
+    else:
+        m.mockDataBuilder(names, products)
     c.matrixBuilder()
 
     recommend = run.run(names)
