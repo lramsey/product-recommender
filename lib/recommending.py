@@ -5,15 +5,6 @@ import math
 recommendationMatrix = []
 goodClusters = []
 
-def recommender(name):
-    if len(recommendationMatrix) == 0:
-        print 'Build the matrix first.'
-    else:
-        recommendation = recommendationMatrix[c.customersMap[name]].pop()
-        attraction = recommendation.keys()[0]
-        product = recommendation[attraction]
-        return product
-
 def buildRecommendations(names, clusters):
     global recommendationMatrix
     recommendationMatrix = []

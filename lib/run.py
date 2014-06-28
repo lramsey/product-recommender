@@ -68,6 +68,7 @@ def run(nameList):
     maps = inputs[1]
     indexMap = inputs[2]
 
+
     customerClustersHelpers = buildCustomerHelpers()
     subClustersHelpers = buildSubHelpers(indexMap, subMats, maps)
 
@@ -78,6 +79,9 @@ def run(nameList):
     powerRecMatrix = r.buildRecommendations(names, powerClustersHelpers)
     productClustersMap = st.createClusterMap(productClusters)
     
+    customerMatrix = c.customerMatrixiser()
+    productMatrix  = p.productMatrixiser()
+
     if(len(powerClustersHelpers) == 0):
         return 'again'
     else:
@@ -106,5 +110,9 @@ def run(nameList):
         results.append(productClustersMap)
         # index 11
         results.append(productClusterLocator)
+        # index 12
+        results.append(customerMatrix)
+        # index 13
+        results.append(productMatrix)
     
         return results

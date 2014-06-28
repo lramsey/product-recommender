@@ -18,6 +18,8 @@ rec.customersMap           = null;
 rec.productsMap            = null;
 rec.productClusters        = null;
 rec.productClustersMap     = null;
+rec.customerMatrix         = null;
+rec.productMatrix          = null;
 rec.customerClusterHelpers = null;
 rec.customerClusters       = null;
 rec.recommendationMatrix   = null;
@@ -84,6 +86,8 @@ _buildRecVariables = function(output, matrix){
   rec.productsMap            = results[3];
   rec.productClusters        = results[2];
   rec.productClustersMap     = results[10];
+  rec.customerMatrix         = results[12];
+  rec.productMatrix          = results[13];
   rec.customerClusterHelpers = results[6];
   rec.customerClusters       = rec.customerClusterHelpers[0];
   rec.recommendationMatrix   = rec.customerClusterHelpers[6];
@@ -115,9 +119,9 @@ _buildRecVariables = function(output, matrix){
   }
   
   rec.results                = [rec.customers, rec.products, rec.purchaseHistory, rec.hasPurchased, rec.customersMap,
-                                rec.productsMap, rec.productClusters, rec.productClustersMap, rec.customerClusterHelpers,
-                                rec.customerClusters, rec.recommendationMatrix, rec.subClustersHelpers, rec.subClusters,
-                                rec.powerClustersHelpers, rec.powerClusters, rec.powerRecMatrix, rec.pastRecommendations];
+                                rec.productsMap, rec.productClusters, rec.productClustersMap, rec.customerMatrix, rec.productMatrix,
+                                rec.customerClusterHelpers,rec.customerClusters, rec.recommendationMatrix, rec.subClustersHelpers,
+                                rec.subClusters, rec.powerClustersHelpers, rec.powerClusters, rec.powerRecMatrix, rec.pastRecommendations];
 };
 
 /* ------------------------------------------------------------------------------------*/
@@ -178,6 +182,44 @@ Recommender.relatedProducts = function(product){
   return cluster;
 };
 
+Recommender.nearestNeighbors = function(name, num){
+  _nameChecker(name);
+  _recVariableChecker();
+  if(typeof(num) !== 'number' || num%1 !== 0){
+    throw new Error('second parameter should be an integer');
+  }
+  var index = rec.customersMap[name];
+  var dists = rec.customerMatrix[index];
+  var similarity = [];
+  var results = [];
+  var ind;
+  var obj;
+  for(var i = 1; i < dists.length; i++){
+    if(index === i){
+      continue;
+    }
+    if(similarity.length < num || dists[i] < similarity[similarity.length-1]){
+      ind = _binarySearch(dists[i], similarity);
+      if(similarity[ind] === dists[i]){
+        results[ind][dists[i]].push(rec.customers[i]);
+      } else{
+        if(dists[i] < similarity[similarity.length-1] && similarity.length >= num){
+          similarity.pop();
+          results.pop();
+        }
+        similarity.splice(ind, 0, dists[i]);
+        obj  = {};
+        obj[dists[i]] = [rec.customers[i]];
+        results.splice(ind, 0, obj);
+      }
+    }
+    else if (dists[i] === similarity[similarity.length-1]){
+      results[similarity.length-1][dists[i]].push(rec.customers[i]);
+    }
+  }
+  return results;
+};
+  
 _nameChecker = function(name){
   if(name === undefined || typeof(rec.customersMap[name]) !== 'number'){
     throw new Error('invalid name. name does not exist in the data set.');
@@ -202,6 +244,31 @@ _productClusterFinder = function(product){
   var index = rec.productClustersMap[product];
   return index;
 };
+
+_binarySearch = function(item, arr, low, high){
+  low = low || 0;
+  high = high || arr.length;
+  var median = Math.floor((low+high)/2);
+  if(low === high){
+    return high;
+  }
+  else if(item < arr[median]){
+    if(low === median){
+      return low;
+    }
+    return _binarySearch(item, arr, low, median);
+  }
+  else if(item > arr[median]){
+    if(low === high-1){
+      return _binarySearch(item, arr, low+1, high);
+    }
+    return _binarySearch(item, arr, median, high);
+  }
+  else{
+    return median;
+  }
+};
+
 
 /* ------------------------------------------------------------------------------------*/
 

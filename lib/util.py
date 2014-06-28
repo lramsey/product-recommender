@@ -38,19 +38,6 @@ def binarySearch(item, arr, low=0, high=-1):
     else:
         return (low+high)/2
 
-# def dupCheck(clusters):
-#     check = {}
-#     for i in range(0,len(clusters)):
-#         for j in range(0,len(clusters[i])):
-#             res = check.get(clusters[i][j], [0,-1])
-#             res[0] += 1
-#             res[1] = i
-#             check[clusters[i][j]] = res
-#     prods = check.keys()
-#     for i in range(0,len(prods)):
-#         if(check[prods[i]][0] > 1):
-#             print 'failure: ' + prods[i] + ' -- ' + str(check[prods[i]])
-
 def dist(v1, v2):
     comb = (v1 - v2)**2.
     distance = np.sum(comb)**(1./2)
@@ -61,3 +48,24 @@ def findCenter(points):
     for i in range(1,len(points)):
         point += points[i]
     return point/len(points + 0.)
+
+def scaleFeatures(matrix):
+    matrix = np.array(matrix)
+    amax = np.amax(matrix)
+    amin = rightHandMin(matrix)
+    scaledMatrix = (matrix - amin)*(1/(amax-amin))
+    scaledMatrix = setDiagonals(scaledMatrix, -1)
+    return scaledMatrix.tolist()
+
+def setDiagonals(matrix, value):
+    for i in range(0,len(matrix)):
+        matrix[i][i] = -1
+    return matrix
+
+def rightHandMin(matrix):
+    amin = 1.0
+    for i in range(0,len(matrix)):
+        for j in range(i+1,len(matrix[i])):
+            if matrix[i][j] < amin:
+                amin = matrix[i][j]
+    return amin
