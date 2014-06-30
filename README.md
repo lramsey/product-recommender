@@ -119,13 +119,13 @@ This method takes a product string as a parameter.  The method returns an array 
 
 This method takes a customer string as a parameter, and contains an optional num parameter that will default to 1 if it is not included as an argument.  The optional overflow parameter defaults to true.   The method reveals which customers are the lowest distance away from the listed customer.  An array is returned that contains at least the num closest customers to the listed customer.  The array is ordered, so customers at a lower index are either closer or the same distance away as customers at a higher index.  The array may be greater than length num if when index num has been reached there is a tie to who is the closest customer.  If the overflow parameter is set to false, then the array will be limited to length num, even in the case of ties.
   
-  rec.nearestNeighbors('Steve', 5, false)
+    rec.nearestNeighbors('Steve', 4, false)
 
 **nearestNeighborhoods(customer, num)**
 
 This method takes a customer string as a parameter, and takes an optional num parameter which will default to 1 if not included.  This method returns an ordered array that shows the num closest relative distances different customers are from the listed customer, along with the customers who are that distance away.  The customerMatrix is used to find this relative distance.  Each entry in the returned array is an object, with a single key referring to a distance.  The corresponding value for that distance key is an array filled with all customers who are that distance away from the listed customer.
 
-  rec.nearestNeighborhoops(customer,num)
+    rec.nearestNeighborhoops('Steve', 4)
 
 [API](#use)
 
