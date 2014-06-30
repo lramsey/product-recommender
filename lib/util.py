@@ -24,20 +24,6 @@ def generateItems(num, arr):
         results.append(text)
     return results
 
-def binarySearch(item, arr, low=0, high=-1):
-    if high == -1:
-        high = len(arr)
-    if (low == high):
-        return high
-    elif item < arr[(low+high)/2]:
-        return binarySearch(item, arr, low, (low+high)/2)
-    elif item > arr[(low+high)/2]:
-        if(low == high-1):
-            return binarySearch(item, arr,low+1, high)
-        return binarySearch(item, arr,(low+high)/2, high)
-    else:
-        return (low+high)/2
-
 def dist(v1, v2):
     comb = (v1 - v2)**2.
     distance = np.sum(comb)**(1./2)

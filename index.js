@@ -182,9 +182,10 @@ Recommender.relatedProducts = function(product){
   return cluster;
 };
 
-Recommender.nearestNeighbors = function(name, num){
+Recommender.nearestNeighborhoods = function(name, num){
   _nameChecker(name);
   _recVariableChecker();
+  num = num || 1;
   if(typeof(num) !== 'number' || num%1 !== 0){
     throw new Error('second parameter should be an integer');
   }
@@ -215,6 +216,33 @@ Recommender.nearestNeighbors = function(name, num){
     }
     else if (dists[i] === similarity[similarity.length-1]){
       results[similarity.length-1][dists[i]].push(rec.customers[i]);
+    }
+  }
+  return results;
+};
+
+Recommender.nearestNeighbors = function(name, num, overflow){
+  var results = [];
+  var i;
+  num = num || 1;
+  if(overflow === undefined){
+    overflow = true;
+  }
+  var neighbors = this.nearestNeighborhoods(name, num);
+  for(i = 0; i < num; i++){
+    if(results.length < num){
+      for(var j in neighbors[i]){
+        for(var k = 0; k < neighbors[i][j].length; k++){
+          results.push(neighbors[i][j][k]);
+        }
+      }
+    } else {
+      break;
+    }
+  }
+  if(!overflow){
+    for(i = num; i < results.length; i++){
+      results.pop();
     }
   }
   return results;

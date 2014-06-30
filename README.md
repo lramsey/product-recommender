@@ -1,15 +1,15 @@
 # Product-Recommender NPM Module
 
-## <a name='contents'/> Contents
+## <a name='contents' href='#'/> Contents
 
 [What is Product-Recommender?](#about)  
 [Setup Process](#setup)  
 [API](#use)  
-[Recommendation Variables](#vars)  
 [Recommendation Engine](#learn)  
 [Analytics](#analysis)  
+[Recommendation Variables](#vars)  
 
-## <a name="about"/>  What is Product-Recommender?
+## <a name='about' href='#'/>  What is Product-Recommender?
 
 Product-Recommender is an npm module that utlizes a python machine learning recommendation engine to give easy access to customer purchase recommendations.  Product-Recommender exists on the npm registry under the name "product-recommender." This repo will have the up to date version of my python recommendation engine, but if you wish to investigate the earlier development of the code, please check out my <a href='https://github.com/lramsey/python-recommender'>python-recommender</a> github repo.
 
@@ -19,7 +19,7 @@ Customers are divided into clusters based on similar purchase histories through 
 
 Using the node.js command line interface, the python recommendation engine can be launched as a child process, with the results streamed to node.  These results are divided into various variables based on the type of data they hold, and a user can gain access to all this raw analysis.  Or, a user may use helper methods within Product-Recommender to parse out desired information, such as which product to recommend to a consumer.
 
-## <a name='setup'/> Setup Process
+## <a name='setup' href='#'/> Setup Process
 
 To utilize the Product-Recommender NPM module, the first step would be to make sure one has successfully installed node.js, npm, and a python version of >= 2.7 or >= 3.2.  To install these items, I would recommend you check out http://nodejs.org/download/ and https://www.python.org/download/.
 
@@ -27,7 +27,7 @@ In addition to these prerequisites, there are a couple python modules that you w
 
 Once all of these dependencies are installed, adding the product-recommender module to your node project is as simple as navigating to your project directory in the terminal and typing 'npm install product-recommender'.
 
-## <a name='use'/> API
+## <a name='use' href='#'/> API
 
 Product-Recommender consists of three core parts, Recommendation Engine, Analytics, and Recommendation Variables.  In the Recommendation Engine section, the machine learning algorithm is run.  The results from this algorithm are then parsed and saved in the recommendation variables.  In the Analytics section, methods are provided that use the recommendation variables to produce desired outcomes. The Analytics methods do such things as finding groups of similar customer or producing a product recommendation for a customer.  In the Recommendation Variable section, I give you access to the Recommendation variables used by my Analytics methods, so you can use them however you see fit.
 
@@ -41,7 +41,7 @@ The three sections are listed below.  Pleas use these links to help in your navi
 [Analytics](#analysis)  
 [Recommendation Variables](#vars)  
 
-## 1.<a name='learn'/> Recommendation Engine
+## 1.<a name='learn' href='#'/> Recommendation Engine
 
 This section consists of the setRecVariables method, which invokes the python recommendation engine.  When the algorithm has finished streaming its results to node, the setRecVariables method then parses these results and assigns values to each of the recommendation variables.  Whenever one wants a fresh reading of the recommendation engine's analysis, one simply needs to run setRecVariables method again and the recommendation variables will be set to the values of the latest analysis.
 
@@ -79,7 +79,7 @@ If a products argument is not used, the parameter will default to a number n whi
 
 [API](#use)
 
-## 2.<a name='analysis'/> Analytics
+## 2.<a name='analysis' href='#'/> Analytics
 
 This grouping consists of methods that are designed to analyze the data held in the recommendation variables to produce a desired result.  These methods accomplish such goals as determining which cluster is most relevant to a customer's purchase of a particular product or producing a product recommendation for a customer based on recent buying patterns. Now I will describe the analytics functions.
     
@@ -115,9 +115,21 @@ This method takes a product string as a parameter.  The method returns an array 
 
     rec.relatedProducts('shoes')
 
+**nearestNeighbors(customer, num, overflow)**
+
+This method takes a customer string as a parameter, and contains an optional num parameter that will default to 1 if it is not included as an argument.  The optional overflow parameter defaults to true.   The method reveals which customers are the lowest distance away from the listed customer.  An array is returned that contains at least the num closest customers to the listed customer.  The array is ordered, so customers at a lower index are either closer or the same distance away as customers at a higher index.  The array may be greater than length num if when index num has been reached there is a tie to who is the closest customer.  If the overflow parameter is set to false, then the array will be limited to length num, even in the case of ties.
+  
+  rec.nearestNeighbors('Steve', 5, false)
+
+**nearestNeighborhoods(customer, num)**
+
+This method takes a customer string as a parameter, and takes an optional num parameter which will default to 1 if not included.  This method returns an ordered array that shows the num closest relative distances different customers are from the listed customer, along with the customers who are that distance away.  The customerMatrix is used to find this relative distance.  Each entry in the returned array is an object, with a single key referring to a distance.  The corresponding value for that distance key is an array filled with all customers who are that distance away from the listed customer.
+
+  rec.nearestNeighborhoops(customer,num)
+
 [API](#use)
 
-## 3.  <a name='vars'/> Recommendation Variables
+## 3.  <a name='vars' href='#'/> Recommendation Variables
 
 The recommendation variables hold the fine-grained results from my product recommendation algorithm.  These results can be accessed overall by the results variable, or can be broken into various categories.  To access a recommendation variable, one would call the getRecVariable method, passing the desired variable name in as a key.
 
@@ -168,6 +180,14 @@ An object that contains each product's string name as keys, with corresponding v
 **productClustersMap**
 
 An object that takes a product as a key.  The corresponding value would be the index one can use in the productClusters array to find the group of products most similar to the input product.
+
+**customerMatrix**
+
+A nested array that describes how relatively far away each of the customers are from each other.  Each row shows how close a particular customer is to all the other customers.  Each index in the inner array compares how close that customer is to the customer referenced in the outer array index.  A value of -1 will occur if the inner array customer and outer array customer are the same.  A value of 0 will be assigned to the inner index customer closest to the outer index customer.  A value of 1 wil be assigned to the outer customer farthest from the inner customer.  All other customers will be scaled between 0 and 1 based on their relative distance.
+
+**productMatrix**
+
+Like the customerMatrix above, except here the nested array structure concerns itself with how far away the products are from each other.
 
 **customerClusters**
   
