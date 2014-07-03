@@ -11,15 +11,6 @@ def __init__(mat, cents):
     global centroids
     centroids = cents
 
-def distFromCentroid(cluster, centroid):
-    a = 0.0
-    for i in range(0, len(cluster)):
-        point = customerPoint(cluster[i])
-        dist = u.dist(point, centroid)
-        a += dist
-    avg = a/len(cluster)
-    return avg
-
 def averageSilhouettes(clusters, matrix, centroids):
     __init__(matrix, centroids)
     silhouettes = 0.0
@@ -47,7 +38,7 @@ def neighboringCentroid(cluster, index):
     for i in range(0,len(centroids)):
         if i == index:
             continue
-        dist = distFromCentroid(cluster, centroids[i])
+        dist = u.dist(centroids[i], centroids[index])
         if dist < amin:
             amin = dist
             neighborIndex = i
