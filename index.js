@@ -182,15 +182,46 @@ Recommender.relatedProducts = function(product){
   return cluster;
 };
 
+Recommender.nearestNeighbors = function(name, num, overflow){
+  return _findNearestNeighbors(name, num, 'customers', overflow);
+};
+
 Recommender.nearestNeighborhoods = function(name, num){
-  _nameChecker(name);
+  return _findNearestNeighborhoods(name, num, 'customers');
+};
+
+Recommender.nearestProducts = function(name, num, overflow){
+  return _findNearestNeighbors(name, num, 'products', overflow);
+};
+
+Recommender.nearestProductNeighborhoods = function(name, num){
+  return _findNearestNeighborhoods(name, num, 'products');
+};
+
+_findNearestNeighborhoods = function(name, num, type){
+  var map;
+  var matrix;
+  var list;
+  if(type === 'customers'){
+    map = rec.customersMap;
+    matrix = rec.customerMatrix;
+    list = rec.customers;
+    _nameChecker(name);
+  } else if(type === 'products'){
+    map = rec.productsMap;
+    matrix = rec.productMatrix;
+    list = rec.products;
+    _productChecker(name);
+  } else{
+    throw new Error('Invalid type.  Find neighbors for customers or products.');
+  }
   _recVariableChecker();
   num = num || 1;
   if(typeof(num) !== 'number' || num%1 !== 0){
     throw new Error('second parameter should be an integer');
   }
-  var index = rec.customersMap[name];
-  var dists = rec.customerMatrix[index];
+  var index = map[name];
+  var dists = matrix[index];
   var similarity = [];
   var results = [];
   var ind;
@@ -202,7 +233,7 @@ Recommender.nearestNeighborhoods = function(name, num){
     if(similarity.length < num || dists[i] < similarity[similarity.length-1]){
       ind = _binarySearch(dists[i], similarity);
       if(similarity[ind] === dists[i]){
-        results[ind][dists[i]].push(rec.customers[i]);
+        results[ind][dists[i]].push(list[i]);
       } else{
         if(dists[i] < similarity[similarity.length-1] && similarity.length >= num){
           similarity.pop();
@@ -210,25 +241,26 @@ Recommender.nearestNeighborhoods = function(name, num){
         }
         similarity.splice(ind, 0, dists[i]);
         obj  = {};
-        obj[dists[i]] = [rec.customers[i]];
+        obj[dists[i]] = [list[i]];
         results.splice(ind, 0, obj);
       }
     }
     else if (dists[i] === similarity[similarity.length-1]){
-      results[similarity.length-1][dists[i]].push(rec.customers[i]);
+      results[similarity.length-1][dists[i]].push(list[i]);
     }
   }
   return results;
 };
 
-Recommender.nearestNeighbors = function(name, num, overflow){
+
+_findNearestNeighbors = function(name, num, type, overflow){
   var results = [];
   var i;
   num = num || 1;
   if(overflow === undefined){
     overflow = true;
   }
-  var neighbors = this.nearestNeighborhoods(name, num);
+  var neighbors = this._findNearestNeighborhoods(name, num, type);
   for(i = 0; i < num; i++){
     if(results.length < num){
       for(var j in neighbors[i]){

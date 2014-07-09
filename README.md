@@ -127,6 +127,18 @@ This method takes a customer string as a parameter, and takes an optional num pa
 
     rec.nearestNeighborhoops('Steve', 4)
 
+**nearestProducts(product, num, overflow)**
+
+This method takes a product string as well as optional nums and overflow paremeters.  The method behaves similarly to nearestNeighbors, but instead of finding the closest customers to a particular customers, it finds the products most similar to the listed product.
+
+    rec.nearestProducts('shoes', 2)
+
+**nearestProductNeighborhoods(product, num)**
+
+This method takes a product string and an optional num parameter.  This method behaves similarly to the nearestNeighborhoods method, but instead of searching for the closest customers to a listed customer, it looks for the closest products to a listed product.
+    
+    rec.nearestProductNeighborhoods('shoes', 2)
+
 [API](#use)
 
 ## 3.  <a name='vars' href='#'/> Recommendation Variables
