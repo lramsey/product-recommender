@@ -45,7 +45,7 @@ The three sections are listed below.  Pleas use these links to help in your navi
 
 This section consists of the setRecVariables method, which invokes the python recommendation engine.  When the algorithm has finished streaming its results to node, the setRecVariables method then parses these results and assigns values to each of the recommendation variables.  Whenever one wants a fresh reading of the recommendation engine's analysis, one simply needs to run setRecVariables method again and the recommendation variables will be set to the values of the latest analysis.
 
-The setRecVariables method takes four parameters: 
+The setRecVariables method takes four parameters.  Any additional arguments will be added as arguments to the callback parameter. 
 
     rec.setRecVariables(history, callback, names, products)
 
@@ -57,7 +57,7 @@ The history argument contains a 2-D array or matrix.  Each entry in the outer ar
     
 **callback**
 
-The callback parameter consists of a custom callback function that will run after my product recommendation engine has finished streaming its results to node.js.  The algorithm runs asynchronously, so properly putting your continuing product-recommender logic inside a callback function is essential to using product-recommender.
+The callback parameter consists of a custom callback function that will run after my product recommendation engine has finished streaming its results to node.js.  The algorithm runs asynchronously, so properly putting your continuing product-recommender logic inside a callback function is essential to using product-recommender.  To add arguments to the callback function, include more than 4 parameters for setRecVariables.  Any argument beyond the fourth named parameter in the rec.setRecVariables method will be added as arguments to the callback function.
 
       var callback = function(){ results = rec.getRecVariables('results')) }
 
@@ -96,6 +96,18 @@ The recommendation matrix parameter allows the more custom recommendation matric
 This method takes a customer string and a product string as parameters.  The method then determines which product group the product belongs to, and accesses the proper recommendation matrix based on that product group.  This custom recommendation matrix is then used to return a product more focused on the customers buying patterns in relation the input product.
 
     rec.recommendByProduct('Steve', 'shoes')
+
+**powerRecommendation(customer)**
+
+This method creates a recommendation for a particular customer, based on the rec.powerRecMatrix recommendation variable.  This matrix only contains results from clusters with a higher silhouette score than customerClusters.  The matrix weighs the best results from each power cluster, and ranks them.  This way, upon calling powerRecommendation, the highest perfoming result across all the power clusters is returned.
+
+    rec.powerRecommendation('Steve')
+
+**pastCustomerRecommendations(customer)**
+
+This method returns an object that reveals which products have been recommended to customers through the different recommendation analytics methods.  To check if a product has been recommended, use the product's name as a key on the object.  If the value returned for that product key is true, the product has been recommended to listed customer.  If the value returned is undefined, the product has not been recommended yet to that customer.
+
+    rec.pastCustomerRecommendatons('Steve')
 
 **relatedCustomers(customer)**
 
@@ -150,6 +162,14 @@ The recommendation variables hold the fine-grained results from my product recom
 To receive an array containing all of the recommendation keys, one can call the getRecKeys() method. 
 
      rec.getRecKeys();
+
+To manually set a value on a recommendation variable, use the loadRecVariable() method.  This method takes two parameterss, a string that signifies the name of the recommendation variable to change, and a value which will be set to that recommendation variable. Any value entered here to a recommendation variable could cause errors in the module if it is not the same format the recommendation variable typically would be after executing setRecVariables.  Also, altering some recommendation variables but not others could lead to outcomes that are not consistent to one set of the recommendation engine's analysis.  Could be used to load past results from the recommendation engine.  Use this method with caution.
+    
+    rec.loadRecVariable(key, value)
+
+To manually set several values on a recommendation variable, use the loadRecVariables method.  The first parameter is an array of strings filled with the name of recommendation variables to change. The second parameter is an array of values which to assign to the previous mentioned recommendation variables.  The value that is in the same index as the recommendation variable name in the key array will be assigned to that recommendation variable.  If the key and value arrays are of different lengths, the code will throw an error.  Could be used to load past results from the recommendation engine.  Again, use with caution.
+
+  rec.loadRecVariables(keys, values)
 
 Initially the recommendation variables will be set to null, until a call is made to launch the python recommendation engine.  Now, I will describe the recommendation variables.
 
@@ -246,7 +266,7 @@ Similar to subClusterHelpers, but containing elements from the powerClusters arr
 
 **powerRecMatrix**
 
-A recommendation matrix built by compiling together the results from the powerClusters and the global customerClusters.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
+A recommendation matrix built by compiling together the results from the powerClusters.  Only recommendation clusters that have a silhouette score higher than than the score associated with customerClusters are included.  The strongest elements from each type of cluster are weighted by silhouette scores and ordered by recommendation strength.
 
 **pastRecommendations**
 

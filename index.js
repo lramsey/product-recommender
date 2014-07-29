@@ -45,6 +45,28 @@ Recommender.getRecKeys = function(){
   return Object.keys(rec);
 };
 
+// use with caution
+Recommender.loadRecVariable = function(key, value){
+  if(rec[key] === undefined){
+    throw new Error('not a valid recommendation variable');
+  } else{
+    rec[key] = value;
+  }
+};
+
+// use with caution
+Recommender.loadRecVariables = function(keys, values){
+  if(keys.length > values.length){
+    throw new Error('Each key must have a value');
+  } else if (keys.length < values.length){
+    throw new Error('Each value must have a key');
+  } else{
+    keys.forEach(function(key, i){
+      this.loadRecVariable(key, values[i]);
+    });
+  }
+};
+
 /* ------------------------------------------------------------------------------------*/
 /* Recommendation Engine
 /*
@@ -94,30 +116,33 @@ _buildRecVariables = function(output, matrix){
   
   rec.subClustersHelpers     = [];
   var productClusterLocator  = results[11];
-  for(i = 0; i < productClusterLocator.length; i++){
-    var locator = productClusterLocator[i];
+
+  productClusterLocator.forEach(function(locator){
     if(locator[0] === 'sub'){
       rec.subClustersHelpers.push(results[7][locator[1]]);
-    } else if(locator[0] === 'power'){
+    } else{
       rec.subClustersHelpers.push(results[8][locator[1]]);
     }
-  }
+  });
   
   rec.subClusters            = [];
-  for(i = 0; i < rec.subClustersHelpers.length; i++){
-    rec.subClusters.push(rec.subClustersHelpers[i][0]);
-  }
+  rec.subClustersHelpers.forEach(function(helper){
+    rec.subClusters.push(helper[0]);
+  });
+
   rec.powerClustersHelpers   = results[8];
   rec.powerClusters          = [];
-  for(i = 0; i < rec.powerClustersHelpers.length; i++){
-    rec.powerClusters.push(rec.powerClustersHelpers[i][0]);
-  }
+
+  rec.powerClustersHelpers.forEach(function(helper){
+    rec.powerClusters.push(helper[0]);
+  });
   rec.powerRecMatrix         = results[5];
-  rec.pastRecommendations    = {};
-  for(i=0; i< rec.customers.length; i++){
-    rec.pastRecommendations[rec.customers[i]] = {};
-  }
   
+  rec.pastRecommendations    = {};
+  rec.customers.forEach(function(customer){
+    rec.pastRecommendations[customer] = {};
+  });
+
   rec.results                = [rec.customers, rec.products, rec.purchaseHistory, rec.hasPurchased, rec.customersMap,
                                 rec.productsMap, rec.productClusters, rec.productClustersMap, rec.customerMatrix, rec.productMatrix,
                                 rec.customerClusterHelpers,rec.customerClusters, rec.recommendationMatrix, rec.subClustersHelpers,
@@ -155,6 +180,16 @@ Recommender.recommendByProduct = function(name, product){
     matrix = rec.subClustersHelpers[index][6];
   }
   return this.recommender(name, matrix);
+};
+
+Recommender.powerRecommendation = function(name){
+  return this.recommender(name, rec.powerRecMatrix);
+};
+
+Recommender.pastCustomerRecommendations = function(name){
+  _nameChecker(name);
+  _recVariableChecker();
+  return rec.pastRecommendations[name];
 };
 
 Recommender.relatedCustomers = function(name){
@@ -226,29 +261,30 @@ _findNearestNeighborhoods = function(name, num, type){
   var results = [];
   var ind;
   var obj;
-  for(var i = 1; i < dists.length; i++){
-    if(index === i){
-      continue;
-    }
-    if(similarity.length < num || dists[i] < similarity[similarity.length-1]){
-      ind = _binarySearch(dists[i], similarity);
-      if(similarity[ind] === dists[i]){
-        results[ind][dists[i]].push(list[i]);
-      } else{
-        if(dists[i] < similarity[similarity.length-1] && similarity.length >= num){
-          similarity.pop();
-          results.pop();
+
+  dists.forEach(function(dist, i){
+    if(index !== i){
+      if(similarity.length < num || dist < similarity[similarity.length-1]){
+        ind = _binarySearch(dist, similarity);
+        if(similarity[ind] === dist){
+          results[ind][dist].push(list[i]);
+        } else{
+          if(dist < similarity[similarity.length-1] && similarity.length >= num){
+            similarity.pop();
+            results.pop();
+          }
+          similarity.splice(ind, 0, dist);
+          obj  = {};
+          obj[dist] = [list[i]];
+          results.splice(ind, 0, obj);
         }
-        similarity.splice(ind, 0, dists[i]);
-        obj  = {};
-        obj[dists[i]] = [list[i]];
-        results.splice(ind, 0, obj);
+      }
+      else if (dist === similarity[similarity.length-1]){
+        results[similarity.length-1][dist].push(list[i]);
       }
     }
-    else if (dists[i] === similarity[similarity.length-1]){
-      results[similarity.length-1][dists[i]].push(list[i]);
-    }
-  }
+  });
+
   return results;
 };
 
@@ -256,22 +292,28 @@ _findNearestNeighborhoods = function(name, num, type){
 _findNearestNeighbors = function(name, num, type, overflow){
   var results = [];
   var i;
+  var neighborhood;
+  var neighbor;
   num = num || 1;
   if(overflow === undefined){
     overflow = true;
   }
+  
   var neighbors = this._findNearestNeighborhoods(name, num, type);
   for(i = 0; i < num; i++){
     if(results.length < num){
       for(var j in neighbors[i]){
-        for(var k = 0; k < neighbors[i][j].length; k++){
-          results.push(neighbors[i][j][k]);
+          neighborhood = neighbors[i][j];
+        for(var k = 0; k < neighborhood.length; k++){
+          neighbor = neighborhood[k];
+          results.push(neighbor);
         }
       }
     } else {
       break;
     }
   }
+
   if(!overflow){
     for(i = num; i < results.length; i++){
       results.pop();
