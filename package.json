@@ -1,6 +1,6 @@
 {
   "name": "product-recommender",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "npm module that utilizes a python machine learning recommendation engine to give easy access to product recommendations.",
   "main": "index.js",
   "scripts": {
@@ -17,9 +17,10 @@
     "machine learning",
     "analytics"
   ],
-  "author": "Luke Ramsey <lramsey177@gmail.com>",
+  "author": "Luke Ramsey",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lramsey/product-recommender/issues"
+    "url": "https://github.com/lramsey/product-recommender/issues",
+    "email": "lramsey177@gmail.com"
   }
 }

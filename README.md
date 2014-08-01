@@ -109,21 +109,39 @@ This method returns an object that reveals which products have been recommended 
 
     rec.pastCustomerRecommendatons('Steve')
 
+**getCustomerCluster(customer)**
+
+This method accepts a customer string as a parameter and returns an array of the global customer cluster that contains that input customer.  These customers in the returned cluster all have similar buying patterns across all products.
+
+  rec.getCustomerCluster('Steve')
+
+**getCustomerClusterByProducts(customer, product)**
+
+This method accepts a customer string and product string as parameters and returns a cluster that is chosen based on the input customer's buying trends in relation to products similar to the input product.  This cluster is an array that contains customer names, including the input customer.
+
+  rec.getCustomerClustersByProducts('Steve', 'shoes')
+
+**getProductCluster(product)**
+
+This method accepts a product string as a parameter and returns an array of products similar to the input product, including the input product.  This returned array is the product cluster that contains the input product.
+
+  rec.getProductCluster('shoes')
+  
 **relatedCustomers(customer)**
 
-This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on clustering.  This result refers to the global cluster group.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
+This method accepts a customer string as a parameter and returns an array of customers with similar purchase histories based on clustering.  This result returns the members of that customer's global cluster group, excluding the input customer.  To investigate more focused groups based on certain product patterns, please use the the relatedCustomersByProduct method.
 
     rec.relatedCustomers('Steve')
 
 **relatedCustomersByProduct(customer, product)**
 
-This method takes a customer string and product string as a parameter. The method returns that customer's cluster based on the input product.  The members of this cluster will have similar buying patterns with the input customer in terms of products similar to the product parameter.
+This method takes a customer string and product string as a parameter. Based on the input product, a cluster is selected that reflects the customer's taste in relation to that product.  The method returns members of that cluster, excluding the input customer.  These customers have similar buying patterns with the input customer in terms of products similar to the product parameter.
 
     rec.relatedCustomersByProduct('Steve', 'shoes')
 
 **relatedProducts(product)**
 
-This method takes a product string as a parameter.  The method returns an array of products my algorithm has judged to be similar based on the aggregate purchase history of my customers.
+This method takes a product string as a parameter.  The method returns an array of products my algorithm has judged to be similar based on the aggregate purchase history of my customers.  The returned products are in the same product cluster as the input product, excluding the input product.
 
     rec.relatedProducts('shoes')
 
