@@ -289,7 +289,7 @@ _findNearestNeighborhoods = function(name, num, type){
 };
 
 
-_findNearestNeighbors = function(name, num, type, overflow){
+var _findNearestNeighbors = function(name, num, type, overflow){
   var results = [];
   var i;
   var neighborhood;
@@ -322,32 +322,32 @@ _findNearestNeighbors = function(name, num, type, overflow){
   return results;
 };
   
-_nameChecker = function(name){
+var _nameChecker = function(name){
   if(name === undefined || typeof(rec.customersMap[name]) !== 'number'){
     throw new Error('invalid name. name does not exist in the data set.');
   }
 };
 
-_productChecker = function(product){
+var _productChecker = function(product){
   if(product === undefined || typeof(rec.productsMap[product]) !== 'number'){
     throw new Error('invalid product. product does not exist in the data set.');
   }
 };
 
-_recVariableChecker = function(){
+var _recVariableChecker = function(){
   if (rec.results === 'null'){
     throw new Error('recommendation variables are null. please run setRecVariables');
   }
 };
 
-_productClusterFinder = function(product){
+var _productClusterFinder = function(product){
   _recVariableChecker();
   _productChecker(product);
   var index = rec.productClustersMap[product];
   return index;
 };
 
-_binarySearch = function(item, arr, low, high){
+var _binarySearch = function(item, arr, low, high){
   low = low || 0;
   high = high || arr.length;
   var median = Math.floor((low+high)/2);

@@ -11,7 +11,7 @@
 
 ## <a name='about' href='#'/>  What is Product-Recommender?
 
-Product-Recommender is an npm module that utlizes a python machine learning recommendation engine to give easy access to customer purchase recommendations.  Product-Recommender exists on the npm registry under the name "product-recommender." This repo will have the up to date version of my python recommendation engine, but if you wish to investigate the earlier development of the code, please check out my <a href='https://github.com/lramsey/python-recommender'>python-recommender</a> github repo.
+Product-Recommender is an npm module that utlizes a python machine learning recommendation engine to give easy access to customer purchase recommendations.  Product-Recommender exists on the npm registry under the name "product-recommender." This repo will have the up to date version of my python recommendation engine, but if you wish to investigate the earlier development of the code, please check out my <a href='https://github.com/lramsey/python-recommender'>python-recommender</a> github repo.  To express your opinions on Product-Recommender, please send an email to lramsey177@gmail.com or submit a github issues request.
 
 The algorithm in the lib folder uses unsupervised machine learning to find trends within customer purchase data.  The algorithm expects three inputs: A list of customer names, a list of products under investigation, and a nested list that mentions how much of each product a customer has purchased.  The algorithm divides this product purchase quantity into two states: whether a customer has bought a product or has not bought a product.
 
