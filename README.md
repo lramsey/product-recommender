@@ -53,13 +53,13 @@ The setRecVariables method takes four parameters.  Any additional arguments will
 
 The history argument contains a 2-D array or matrix.  Each entry in the outer array contains the purchase history of an individual customer.  The length of the outer array is the same length as the names array below, so each customer in the data set is represented in the history parameter.  The length of each inner array is the length of the products array below.  Each inner array contains information on which product from the products list each customer has purchased.  The order of products in the inner array should match the order in the products array, so each column of the 2-D array refers to a particular product.
 
-      var history = [ [1,0,0], [1,1,1], [0,1,1] ]
+    var history = [ [1,0,0], [1,1,1], [0,1,1] ]
     
 **callback**
 
 The callback parameter consists of a custom callback function that will run after my product recommendation engine has finished streaming its results to node.js.  The algorithm runs asynchronously, so properly putting your continuing product-recommender logic inside a callback function is essential to using product-recommender.  To add arguments to the callback function, include more than 4 parameters for setRecVariables.  Any argument beyond the fourth named parameter in the rec.setRecVariables method will be added as arguments to the callback function.
 
-      var callback = function(){ results = rec.getRecVariables('results')) }
+    var callback = function(){ results = rec.getRecVariables('results')) }
 
 **names**
       
@@ -67,7 +67,7 @@ The names argument consists of an array of customer names/unique identifiers.  E
 
 If a names argument is not used, the parameter will default to a number n which is the length of the outer array in the history paremeter nested array.  A names array of length n will be created and filled with random unique name strings for each index in the array.
 
-      var names = [ 'Steve', 'Henry', 'Thea', 'Patrick' ]
+    var names = [ 'Steve', 'Henry', 'Thea', 'Patrick' ]
 
 **products**
       
@@ -75,7 +75,7 @@ The products argument consists of an array of product names/unique identifiers. 
 
 If a products argument is not used, the parameter will default to a number n which is the same length of any of the inner arrays in the history parameter nested array.  A products array of length n will be created and filled with random unique product strings for each index in the array.
 
-      var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
+    var products = [ 'shoes', 'socks', 'shirts', 'shorts' ]
 
 [API](#use)
 
@@ -113,19 +113,19 @@ This method returns an object that reveals which products have been recommended 
 
 This method accepts a customer string as a parameter and returns an array of the global customer cluster that contains that input customer.  These customers in the returned cluster all have similar buying patterns across all products.
 
-  rec.getCustomerCluster('Steve')
+    rec.getCustomerCluster('Steve')
 
 **getCustomerClusterByProducts(customer, product)**
 
 This method accepts a customer string and product string as parameters and returns a cluster that is chosen based on the input customer's buying trends in relation to products similar to the input product.  This cluster is an array that contains customer names, including the input customer.
 
-  rec.getCustomerClustersByProducts('Steve', 'shoes')
+    rec.getCustomerClustersByProducts('Steve', 'shoes')
 
 **getProductCluster(product)**
 
 This method accepts a product string as a parameter and returns an array of products similar to the input product, including the input product.  This returned array is the product cluster that contains the input product.
 
-  rec.getProductCluster('shoes')
+    rec.getProductCluster('shoes')
   
 **relatedCustomers(customer)**
 
@@ -179,7 +179,7 @@ The recommendation variables hold the fine-grained results from my product recom
 
 To receive an array containing all of the recommendation keys, one can call the getRecKeys() method. 
 
-     rec.getRecKeys();
+    rec.getRecKeys();
 
 To manually set a value on a recommendation variable, use the loadRecVariable() method.  This method takes two parameterss, a string that signifies the name of the recommendation variable to change, and a value which will be set to that recommendation variable. Any value entered here to a recommendation variable could cause errors in the module if it is not the same format the recommendation variable typically would be after executing setRecVariables.  Also, altering some recommendation variables but not others could lead to outcomes that are not consistent to one set of the recommendation engine's analysis.  Could be used to load past results from the recommendation engine.  Use this method with caution.
     
@@ -187,7 +187,7 @@ To manually set a value on a recommendation variable, use the loadRecVariable() 
 
 To manually set several values on a recommendation variable, use the loadRecVariables method.  The first parameter is an array of strings filled with the name of recommendation variables to change. The second parameter is an array of values which to assign to the previous mentioned recommendation variables.  The value that is in the same index as the recommendation variable name in the key array will be assigned to that recommendation variable.  If the key and value arrays are of different lengths, the code will throw an error.  Could be used to load past results from the recommendation engine.  Again, use with caution.
 
-  rec.loadRecVariables(keys, values)
+    rec.loadRecVariables(keys, values)
 
 Initially the recommendation variables will be set to null, until a call is made to launch the python recommendation engine.  Now, I will describe the recommendation variables.
 
