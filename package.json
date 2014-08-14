@@ -1,6 +1,6 @@
 {
   "name": "product-recommender",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "npm module that utilizes a python machine learning recommendation engine to give easy access to product recommendations.",
   "main": "index.js",
   "scripts": {
