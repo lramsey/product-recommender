@@ -50,7 +50,7 @@ def buildPowerHelpers(subClustersHelpers, customerClustersHelpers):
 
     return [powerClustersHelpers, productClusterLocator]
 
-def run(nameList):
+def run(nameList, matrix):
     global products
     products = p.products
     global names
@@ -81,7 +81,8 @@ def run(nameList):
     
     customerMatrix = c.customerMatrixiser()
     productMatrix  = p.productMatrixiser()
-
+    
+    hasPurchased = matrix
     if(len(powerClustersHelpers) == 0):
         return 'again'
     else:
@@ -114,5 +115,7 @@ def run(nameList):
         results.append(customerMatrix)
         # index 13
         results.append(productMatrix)
-    
+        # index 14
+        results.append(hasPurchased)
+        
         return results

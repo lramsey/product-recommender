@@ -2,36 +2,38 @@ var rec = require('./variables').rec;
 var Engine = {};
 
 Engine.setRecVariables = function(matrix, cb, names, prods){
-  names = names || matrix.length;
-  prods = prods || matrix[0].length;
+  var path;
+  if(Array.isArray(matrix)){
+    path = false;
+  } else if (typeof matrix === 'string'){
+    path = true;
+  }
   cb = cb || function(){};
-  var i;
 
-  mat = JSON.stringify(matrix);
   names = JSON.stringify(names);
   prods = JSON.stringify(prods);
 
   var python = require('child_process').spawn(
     'python',
-    [__dirname + '/../lib/exec.py', names, prods, mat]);
+    [__dirname + '/../lib/exec.py', names, prods, matrix, path]);
   output = '';
   python.stdout.on('data', function(data){
     output += data;
   });
   python.stdout.on('close', function(){
-    _buildRecVariables(output, matrix);
+    _buildRecVariables(output);
     args = Array.prototype.slice.call(arguments,4);
     cb.apply(this,args);
   });
 };
 
-var _buildRecVariables = function(output, matrix){
+var _buildRecVariables = function(output){
   var results = JSON.parse(output);
 
   rec.rawResults             = results;
   rec.customers              = results[0];
   rec.products               = results[4];
-  rec.purchaseHistory        = matrix;
+  rec.purchaseHistory        = results[14];
   rec.hasPurchased           = results[9];
   rec.customersMap           = results[1];
   rec.productsMap            = results[3];

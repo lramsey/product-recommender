@@ -7,10 +7,28 @@ parser = argparse.ArgumentParser()
 parser.add_argument('names')
 parser.add_argument('products')
 parser.add_argument('matrix')
-args = parser.parse_args()
-names = ast.literal_eval(args.names)
+parser.add_argument('path')
+args     = parser.parse_args()
+names    = ast.literal_eval(args.names)
 products = ast.literal_eval(args.products)
-matrix = ast.literal_eval(args.matrix)
+path     = args.path
+
+if path:
+    matrixPath = args.matrix
+    with open(matrixPath) as f:
+        matrix = f.read().splitlines()
+    for index in range(0, len(matrix)):
+        matrix[index] = matrix[index].split(',')
+        matrix[index] = map(int,matrix[index])
+    f.close()
+else:
+    matrix = ast.literal_eval(args.matrix)
+
+if type(names) != list:
+    names = len(matrix)
+if type(products) != list:
+    products = len(matrix[0])
+
 results = i.init(names, products, matrix)
 
 def sanitizeResults(res):

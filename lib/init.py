@@ -4,7 +4,6 @@ import mock         as m
 import run
 
 names = []
-products = []
 
 def addCustomers(nameList):
     global names
@@ -18,14 +17,13 @@ def dataBuilder(matrix):
         for j in range(0,len(matrix[i])):
             num = matrix[i][j]
             while num > 0:
-                c.customers[i].purchaseItem(products[j])
+                c.customers[i].purchaseItem(p.products[j])
                 num -= 1
 
 def init(nameList, productList, matrix):
     if isinstance(productList, int):
         products = m.mockProducts(productList)
     p.addProducts(products)
-
     if isinstance(nameList, int):
         nameList = m.mockCustomers(nameList)
     addCustomers(nameList)
@@ -38,7 +36,7 @@ def init(nameList, productList, matrix):
         m.mockDataBuilder(names, products)
     c.matrixBuilder()
 
-    recommend = run.run(names)
+    recommend = run.run(names, matrix)
     while recommend == 'again':
-        recommend = run.run(names)
+        recommend = run.run(names, matrix)
     return recommend

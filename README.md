@@ -51,9 +51,13 @@ The setRecVariables method takes four parameters.  Any additional arguments will
 
 **history**
 
-The history argument contains a 2-D array or matrix.  Each entry in the outer array contains the purchase history of an individual customer.  The length of the outer array is the same length as the names array below, so each customer in the data set is represented in the history parameter.  The length of each inner array is the length of the products array below.  Each inner array contains information on which product from the products list each customer has purchased.  The order of products in the inner array should match the order in the products array, so each column of the 2-D array refers to a particular product.
+The history argument contains either a matrix or a string that references the directory structure of a file containing a matrix.  A matrix is a 2d-array.  Each entry in the outer array contains the purchase history of an individual customer.  The length of the outer array is the same length as the names array below, so each customer in the data set is represented in the history parameter.  The length of each inner array is the length of the products array below.  Each inner array contains information on which product from the products list each customer has purchased.  The order of products in the inner array should match the order in the products array, so each column of the 2-D array refers to a particular product.
 
     var history = [ [1,0,0], [1,1,1], [0,1,1] ]
+
+If the history parameter contains a file directory instead, the matrix contained within that file will be read directly into the Python algorithm.  This would be perferred for data analysis on larger matrices.
+    
+    var history = '/some/valid/directory/matrix.txt'
     
 **callback**
 
