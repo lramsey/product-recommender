@@ -55,7 +55,7 @@ The history argument contains either a matrix or a string that references the di
 
     var history = [ [1,0,0], [1,1,1], [0,1,1] ]
 
-If the history parameter contains a file directory instead, the matrix contained within that file will be read directly into the Python algorithm.  This would be perferred for data analysis on larger matrices.
+If the history parameter contains a file directory instead, the matrix contained within that file will be read directly into the Python algorithm.  This would be necessary for data analysis on larger matrices, but could be done for matrices of any size.
     
     var history = '/some/valid/directory/matrix.txt'
     
