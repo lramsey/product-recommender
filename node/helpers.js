@@ -83,7 +83,8 @@ helpers._findNearestNeighbors = function(name, num, type, overflow){
   }
 
   if(!overflow){
-    for(i = num; i < results.length; i++){
+    var len = results.length;
+    for(i = num; i < len; i++){
       results.pop();
     }
   }
